@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  micro.service.a:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - SEQ_URL=http://logs
+    ports:
+      - "5001:80"   
+      
+  micro.service.b:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - SEQ_URL=http://logs
+    ports:
+      - "5002:80"   
+      
+  logs:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5003:80"
+      
+  sql:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "51433:1433"

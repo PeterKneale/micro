@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  logs:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5003:80"
+      
+  sql:
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "51433:1433"
+
+  portainer:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5003:80"

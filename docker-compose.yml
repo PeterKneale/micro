@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+
+  micro.service.a:
+    image: micro.service.a
+    build:
+      context: .
+      dockerfile: src/ServiceA/Micro.ServiceA/Dockerfile    
+    depends_on:
+      - sql
+      - logs
+  
+  micro.service.b:
+    image: micro.service.b
+    build:
+      context: .
+      dockerfile: src/ServiceB/Micro.ServiceB/Dockerfile    
+    depends_on:
+      - sql
+      - logs
+      
+  logs:
+    image: datalust/seq:latest
+
+  sql:
+    image: microsoft/mssql-server-linux:2017-latest

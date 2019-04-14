@@ -1,6 +1,14 @@
 version: '3.4'
 
 services:
+  micro.acceptance:
+    image: micro.acceptance
+    build:
+      context: .
+      dockerfile: tests/Micro.AcceptanceTests/Dockerfile    
+    depends_on:
+      - micro.service.a
+      - micro.service.b
 
   micro.service.a:
     image: micro.service.a

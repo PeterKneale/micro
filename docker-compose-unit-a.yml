@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  micro.unit.a:
+    image: micro.unit.a
+    build:
+      context: .
+      dockerfile: src/Micro.ServiceA/Dockerfile   
+      target: unit 

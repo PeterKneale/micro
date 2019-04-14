@@ -1,6 +1,13 @@
 version: '3.4'
 
 services:
+  micro.acceptance:
+    environment:
+      - SERVICE_A_API_ENDPOINT=http://micro.service.a
+      - SERVICE_A_CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=ServiceA;User Id=sa;Password=Pass@word;persist security info=False;packet size=4096
+      - SERVICE_B_API_ENDPOINT=http://micro.service.b
+      - SERVICE_B_CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=ServiceB;User Id=sa;Password=Pass@word;persist security info=False;packet size=4096
+
   micro.service.a:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

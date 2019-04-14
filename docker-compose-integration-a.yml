@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  micro.integration.a:
+    image: micro.integration.a
+    build:
+      context: .
+      dockerfile: src/Micro.ServiceA/Dockerfile   
+      target: integration 
+    depends_on:
+      - db
+      - logs
+
+  logs:
+    image: datalust/seq:latest
+
+  db:
+    image: microsoft/mssql-server-linux

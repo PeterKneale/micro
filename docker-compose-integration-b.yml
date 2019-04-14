@@ -1,25 +1,16 @@
 version: '3.4'
 
 services:
-
-  micro.service.a:
-    image: micro.service.a
-    build:
-      context: .
-      dockerfile: src/Micro.ServiceA/Dockerfile    
-    depends_on:
-      - db
-      - logs
-  
-  micro.service.b:
-    image: micro.service.b
+  micro.integration.b:
+    image: micro.integration.b
     build:
       context: .
       dockerfile: src/Micro.ServiceB/Dockerfile    
+      target: integration 
     depends_on:
       - db
       - logs
-      
+
   logs:
     image: datalust/seq:latest
 

@@ -7,15 +7,10 @@ services:
     ports:
       - "5003:80"
       
-  sql:
+  db:
     environment:
       - SA_PASSWORD=Pass@word
       - ACCEPT_EULA=Y
     ports:
       - "51433:1433"
 
-  portainer:
-    environment:
-      - ACCEPT_EULA=Y
-    ports:
-      - "5003:80"

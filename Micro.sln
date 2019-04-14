@@ -5,31 +5,43 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0E0EE69B-4520-4C16-B68A-1EFA74D6FACB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceA", "ServiceA", "{C8B4BAFE-B44F-4AE9-98D8-E796CB6D59C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceA", "src\Micro.ServiceA\Micro.ServiceA.csproj", "{7C9ECE51-797F-491E-A87D-9A48D08E8DC7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceA", "src\ServiceA\Micro.ServiceA\Micro.ServiceA.csproj", "{7C9ECE51-797F-491E-A87D-9A48D08E8DC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceB", "src\Micro.ServiceB\Micro.ServiceB.csproj", "{E55B5B8C-F335-4910-A0B9-AEBD6EDB7582}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceB", "ServiceB", "{60258941-E883-48AD-B51B-3D79428A597D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceA.UnitTests", "tests\Micro.ServiceA.UnitTests\Micro.ServiceA.UnitTests.csproj", "{E9AD29DA-928C-4388-9658-DC58F38C82DF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceB", "src\ServiceB\Micro.ServiceB\Micro.ServiceB.csproj", "{E55B5B8C-F335-4910-A0B9-AEBD6EDB7582}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceA.IntegrationTests", "tests\Micro.ServiceA.IntegrationTests\Micro.ServiceA.IntegrationTests.csproj", "{F1F11300-7B51-498B-B66B-1BB811C79E23}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceA.UnitTests", "src\ServiceA\Micro.ServiceA.UnitTests\Micro.ServiceA.UnitTests.csproj", "{E9AD29DA-928C-4388-9658-DC58F38C82DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceB.IntegrationTests", "tests\Micro.ServiceB.IntegrationTests\Micro.ServiceB.IntegrationTests.csproj", "{0851AA9E-8E39-4828-824D-8C46F3F69AE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceA.IntegrationTests", "src\ServiceA\Micro.ServiceA.IntegrationTests\Micro.ServiceA.IntegrationTests.csproj", "{F1F11300-7B51-498B-B66B-1BB811C79E23}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceB.UnitTests", "tests\Micro.ServiceB.UnitTests\Micro.ServiceB.UnitTests.csproj", "{65E437F0-E651-495F-AE48-17FEDA424E0C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceB.IntegrationTests", "src\ServiceB\Micro.ServiceB.IntegrationTests\Micro.ServiceB.IntegrationTests.csproj", "{0851AA9E-8E39-4828-824D-8C46F3F69AE6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.ServiceB.UnitTests", "src\ServiceB\Micro.ServiceB.UnitTests\Micro.ServiceB.UnitTests.csproj", "{65E437F0-E651-495F-AE48-17FEDA424E0C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.AcceptanceTests", "src\Tests\Micro.AcceptanceTests\Micro.AcceptanceTests.csproj", "{7571C20E-5473-4370-9A6B-D6779C252A7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.AcceptanceTests", "tests\Micro.AcceptanceTests\Micro.AcceptanceTests.csproj", "{7571C20E-5473-4370-9A6B-D6779C252A7B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{D955E946-5B59-43A0-85AB-C48F81AA5F5A}"
 	ProjectSection(SolutionItems) = preProject
+		docker-compose-acceptance.override.yml = docker-compose-acceptance.override.yml
+		docker-compose-acceptance.yml = docker-compose-acceptance.yml
 		docker-compose-infra.override.yml = docker-compose-infra.override.yml
 		docker-compose-infra.yml = docker-compose-infra.yml
+		docker-compose-integration-a.override.yml = docker-compose-integration-a.override.yml
+		docker-compose-integration-a.yml = docker-compose-integration-a.yml
+		docker-compose-integration-b.override.yml = docker-compose-integration-b.override.yml
+		docker-compose-integration-b.yml = docker-compose-integration-b.yml
+		docker-compose-unit-a.override.yml = docker-compose-unit-a.override.yml
+		docker-compose-unit-a.yml = docker-compose-unit-a.yml
+		docker-compose-unit-b.override.yml = docker-compose-unit-b.override.yml
+		docker-compose-unit-b.yml = docker-compose-unit-b.yml
 		docker-compose.override.yml = docker-compose.override.yml
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5B474518-F3CD-4091-BCBE-AC3194C38FAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.Library", "src\Micro.Library\Micro.Library.csproj", "{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.Tests", "tests\Micro.Tests\Micro.Tests.csproj", "{C3847FD8-6753-4CA2-A389-730A0319ADE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,19 +137,44 @@ Global
 		{7571C20E-5473-4370-9A6B-D6779C252A7B}.Release|x64.Build.0 = Release|Any CPU
 		{7571C20E-5473-4370-9A6B-D6779C252A7B}.Release|x86.ActiveCfg = Release|Any CPU
 		{7571C20E-5473-4370-9A6B-D6779C252A7B}.Release|x86.Build.0 = Release|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Debug|x64.Build.0 = Debug|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Debug|x86.Build.0 = Debug|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Release|x64.ActiveCfg = Release|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Release|x64.Build.0 = Release|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Release|x86.ActiveCfg = Release|Any CPU
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724}.Release|x86.Build.0 = Release|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Debug|x64.Build.0 = Debug|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Debug|x86.Build.0 = Debug|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Release|x64.ActiveCfg = Release|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Release|x64.Build.0 = Release|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Release|x86.ActiveCfg = Release|Any CPU
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{C8B4BAFE-B44F-4AE9-98D8-E796CB6D59C2} = {0E0EE69B-4520-4C16-B68A-1EFA74D6FACB}
-		{7C9ECE51-797F-491E-A87D-9A48D08E8DC7} = {C8B4BAFE-B44F-4AE9-98D8-E796CB6D59C2}
-		{60258941-E883-48AD-B51B-3D79428A597D} = {0E0EE69B-4520-4C16-B68A-1EFA74D6FACB}
-		{E55B5B8C-F335-4910-A0B9-AEBD6EDB7582} = {60258941-E883-48AD-B51B-3D79428A597D}
-		{E9AD29DA-928C-4388-9658-DC58F38C82DF} = {C8B4BAFE-B44F-4AE9-98D8-E796CB6D59C2}
-		{F1F11300-7B51-498B-B66B-1BB811C79E23} = {C8B4BAFE-B44F-4AE9-98D8-E796CB6D59C2}
-		{0851AA9E-8E39-4828-824D-8C46F3F69AE6} = {60258941-E883-48AD-B51B-3D79428A597D}
-		{65E437F0-E651-495F-AE48-17FEDA424E0C} = {60258941-E883-48AD-B51B-3D79428A597D}
+		{7C9ECE51-797F-491E-A87D-9A48D08E8DC7} = {0E0EE69B-4520-4C16-B68A-1EFA74D6FACB}
+		{E55B5B8C-F335-4910-A0B9-AEBD6EDB7582} = {0E0EE69B-4520-4C16-B68A-1EFA74D6FACB}
+		{E9AD29DA-928C-4388-9658-DC58F38C82DF} = {5B474518-F3CD-4091-BCBE-AC3194C38FAE}
+		{F1F11300-7B51-498B-B66B-1BB811C79E23} = {5B474518-F3CD-4091-BCBE-AC3194C38FAE}
+		{0851AA9E-8E39-4828-824D-8C46F3F69AE6} = {5B474518-F3CD-4091-BCBE-AC3194C38FAE}
+		{65E437F0-E651-495F-AE48-17FEDA424E0C} = {5B474518-F3CD-4091-BCBE-AC3194C38FAE}
+		{7571C20E-5473-4370-9A6B-D6779C252A7B} = {5B474518-F3CD-4091-BCBE-AC3194C38FAE}
+		{96C684CD-0C5A-4D36-8F5C-2B188A7E4724} = {0E0EE69B-4520-4C16-B68A-1EFA74D6FACB}
+		{C3847FD8-6753-4CA2-A389-730A0319ADE4} = {5B474518-F3CD-4091-BCBE-AC3194C38FAE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A3DBFE17-B2BB-41A0-BED5-3ED75B167A60}

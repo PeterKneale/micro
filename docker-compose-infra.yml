@@ -5,8 +5,5 @@ services:
   logs:
     image: datalust/seq:latest
 
-  sql:
-    image: microsoft/mssql-server-linux:2017-latest
-
-  portainer:
-    image: portainer/portainer
+  db:
+    image: microsoft/mssql-server-linux

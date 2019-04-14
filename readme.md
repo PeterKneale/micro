@@ -1,6 +1,8 @@
 # micro
 - A demo of two micro services with necessary support infrastructure running within docker containers and launched by docker compose
 
+[![Build status](https://ci.appveyor.com/api/projects/status/e29quxiplixm9v7x?svg=true)](https://ci.appveyor.com/project/PeterKneale/micro)
+
 # Demo's
 
 1. Run the cluster entirely in docker

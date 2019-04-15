@@ -2,21 +2,23 @@
 using System.Data.SqlClient;
 using Dapper;
 using Micro.Library.Internals;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Polly;
 using Polly.Retry;
 
 namespace Micro.Library
 {
-    public static class AppBuilderExtensions
+    public static class DatabaseExtensions
     {
         private static readonly RetryPolicy _retry = Policy
                 .Handle<Exception>()
                 .WaitAndRetry(50, (a) => TimeSpan.FromMilliseconds(200));
 
-        public static IApplicationBuilder WaitForDatabaseServer(this IApplicationBuilder builder, string connectionString)
+        public static IWebHostBuilder UseDatabase(this IWebHostBuilder builder, string connectionString)
         {
-            var master = ConnectionStrings.ConvertToMasterConnectionString(connectionString);
+            var database = DatabaseHelper.GetDatabaseName(connectionString);
+            var server = DatabaseHelper.GetServerName(connectionString);
+            var master = DatabaseHelper.ConvertToMasterConnectionString(connectionString);
 
             _retry.Execute(() =>
             {
@@ -26,15 +28,6 @@ namespace Micro.Library
                     connection.Close();
                 }
             });
-
-            return builder;
-        }
-
-        public static IApplicationBuilder UseDatabase(this IApplicationBuilder builder, string connectionString)
-        {
-            var database = ConnectionStrings.GetDatabaseName(connectionString);
-            var server = ConnectionStrings.GetServerName(connectionString);
-            var master = ConnectionStrings.ConvertToMasterConnectionString(connectionString);
 
             _retry.Execute(() =>
             {

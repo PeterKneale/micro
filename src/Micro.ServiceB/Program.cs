@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
+using Micro.Library;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,17 +12,37 @@ namespace Micro.ServiceB
 {
     public class Program
     {
-        public static readonly string AppName = typeof(Program).Namespace;
+        public static readonly string AppName = Assembly.GetExecutingAssembly().GetName().Name;
 
         public static int Main(string[] args)
         {
-            var configuration = GetConfiguration();
-            Log.Logger = CreateSerilogLogger(configuration);
+            var configuration = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+               .AddEnvironmentVariables()
+               .Build();
+
+            var connection = configuration["CONNECTION_STRING"];
+            var seq = configuration["SEQ_URL"];
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .Enrich.WithProperty("AppName", AppName)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.Seq(seq)
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
 
             try
             {
                 Log.Information("Starting {AppName}", AppName);
-                CreateWebHostBuilder(args).Build().Run();
+                WebHost.CreateDefaultBuilder()
+                    .UseStartup<Startup>()
+                    .UseSerilog()
+                    .UseDatabase(connection)
+                    .Build()
+                    .Run();
                 Log.Information("Stopped {AppName}", AppName);
                 return 0;
             }
@@ -33,34 +55,6 @@ namespace Micro.ServiceB
             {
                 Log.CloseAndFlush();
             }
-        }
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        {
-            return WebHost.CreateDefaultBuilder(args)
-                .UseSerilog()
-                .UseStartup<Startup>();
-        }
-
-        private static IConfiguration GetConfiguration()
-        {
-            return new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-        }
-
-        private static ILogger CreateSerilogLogger(IConfiguration configuration)
-        {
-            return new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .Enrich.WithProperty("AppName", AppName)
-                .Enrich.FromLogContext()
-                .WriteTo.Console()
-                .WriteTo.Seq(configuration["SEQ_URL"])
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
         }
     }
 }

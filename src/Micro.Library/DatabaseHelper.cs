@@ -2,7 +2,7 @@
 
 namespace Micro.Library.Internals
 {
-    internal static class ConnectionStrings
+    internal static class DatabaseHelper
     {
         public static string ConvertToMasterConnectionString(string connectionString)
         {

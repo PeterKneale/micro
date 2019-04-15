@@ -1,5 +1,4 @@
-﻿using Micro.Library;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -31,9 +30,8 @@ namespace Micro.ServiceB
             {
                 app.UseHsts();
             }
+
             app
-                .WaitForDatabaseServer(Configuration.GetConnectionString())
-                .UseDatabase(Configuration.GetConnectionString())
                 .UseHttpsRedirection()
                 .UseMvc();
         }

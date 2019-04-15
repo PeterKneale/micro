@@ -1,4 +1,4 @@
-using System.Data;
+using Dapper;
 using FluentAssertions;
 using Micro.Tests.Fixtures;
 using Xunit;
@@ -17,41 +17,19 @@ namespace Micro.AcceptanceTests
         [Fact]
         public void Verify_service_a_database_available()
         {
-            // arrange
-            var connection = _db.ServiceA;
-            var command = connection.CreateCommand();
-            command.CommandText = "SELECT 1;";
-            command.CommandType = CommandType.Text;
-
-            // act
-            connection.Open();
-            var result = command.ExecuteScalar();
-            connection.Close();
-
-            // assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<int>();
-            result.Should().Be(1);
+            _db.ServiceA.ExecuteScalar("SELECT 1;")
+                .Should().NotBeNull().And
+                .Should().BeOfType<int>()
+                .Should().Be(1);
         }
 
         [Fact]
         public void Verify_service_b_database_available()
         {
-            // arrange
-            var connection = _db.ServiceB;
-            var command = connection.CreateCommand();
-            command.CommandText = "SELECT 1;";
-            command.CommandType = CommandType.Text;
-
-            // act
-            connection.Open();
-            var result = command.ExecuteScalar();
-            connection.Close();
-
-            // assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<int>();
-            result.Should().Be(1);
+            _db.ServiceB.ExecuteScalar("SELECT 1;")
+                .Should().NotBeNull().And
+                .Should().BeOfType<int>()
+                .Should().Be(1);
         }
     }
 }

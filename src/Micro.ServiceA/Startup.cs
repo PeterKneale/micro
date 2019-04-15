@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +21,7 @@ namespace Micro.ServiceA
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddTransient<Func<IDbConnection>>(x => () => new SqlConnection(Configuration["CONNECTION_STRING"]));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

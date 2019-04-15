@@ -21,17 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.AcceptanceTests", "te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{D955E946-5B59-43A0-85AB-C48F81AA5F5A}"
 	ProjectSection(SolutionItems) = preProject
-		docker-compose-acceptance.override.yml = docker-compose-acceptance.override.yml
 		docker-compose-acceptance.yml = docker-compose-acceptance.yml
-		docker-compose-infra.override.yml = docker-compose-infra.override.yml
 		docker-compose-infra.yml = docker-compose-infra.yml
-		docker-compose-integration-a.override.yml = docker-compose-integration-a.override.yml
 		docker-compose-integration-a.yml = docker-compose-integration-a.yml
-		docker-compose-integration-b.override.yml = docker-compose-integration-b.override.yml
 		docker-compose-integration-b.yml = docker-compose-integration-b.yml
-		docker-compose-unit-a.override.yml = docker-compose-unit-a.override.yml
 		docker-compose-unit-a.yml = docker-compose-unit-a.yml
-		docker-compose-unit-b.override.yml = docker-compose-unit-b.override.yml
 		docker-compose-unit-b.yml = docker-compose-unit-b.yml
 		docker-compose.override.yml = docker-compose.override.yml
 		docker-compose.yml = docker-compose.yml

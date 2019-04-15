@@ -7,3 +7,11 @@ services:
       context: .
       dockerfile: src/Micro.ServiceA/Dockerfile   
       target: unit 
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=ServiceA;User Id=sa;Password=Pass@word;persist security info=False;packet size=4096
+      - SEQ_URL=http://logs
+    entrypoint:
+      - dotnet
+      - test

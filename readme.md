@@ -61,3 +61,8 @@ docker-compose -f docker-compose-acceptance.yml up --build --force-recreate --ab
         - Try searching for `select count(1) from stream group by AppName`
     - SqlServer -> `Server=localhost,51433;Database=master;User Id=sa;Password=Pass@word;`
 
+```plantuml
+@startuml
+folder test 
+@enduml
+```

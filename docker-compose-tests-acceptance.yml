@@ -1,6 +1,7 @@
 version: '3.4'
 
 services:
+
   micro.services.acceptancetests:
     image: micro.services.acceptancetests
     build:
@@ -66,3 +67,6 @@ services:
       - ACCEPT_EULA=Y
     ports:
       - "51433:1433"
+
+volumes:
+  /tests:

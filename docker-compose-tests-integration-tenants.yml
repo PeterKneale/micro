@@ -1,6 +1,7 @@
 version: '3.4'
 
 services:
+
   micro.services.tenants.integrationtests:
     image: micro.services.tenants.integrationtests
     build:
@@ -36,4 +37,7 @@ services:
       - SA_PASSWORD=Password123*
       - ACCEPT_EULA=Y
     ports:
-      - "51433:1433"
+      - "51433:1433"      
+
+volumes:
+  /tests:

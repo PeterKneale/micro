@@ -18,13 +18,10 @@ services:
       - SEQ_URL=http://logs
     ports:
       - "5001:80"
-    volumes: 
-      - ./tests:/tests
     entrypoint:
       - dotnet
       - test
-      - --logger
-      - trx;LogFileName=/tests/micro.services.tenants.integrationtests.xml
+      - --logger:Appveyor
 
   logs:
     image: datalust/seq:latest

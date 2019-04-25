@@ -1,23 +1,21 @@
-set -x
+#!/bin/bash  
+set -e
+
 echo "Building"
 docker-compose -f docker-compose.yml build --force-recreate
 
-echo "Running unit tests for service a"
-docker-compose -f docker-compose-unit-a.yml up --build --force-recreate \
-    --abort-on-container-exit --exit-code-from micro.unit.a
+echo "Running unit tests for tenants"
+docker-compose -f docker-compose-tests-unit-tenants.yml up --build --force-recreate
 
-echo "Running unit tests for service b"
-docker-compose -f docker-compose-unit-b.yml up --build --force-recreate \
-    --abort-on-container-exit --exit-code-from micro.unit.b
+echo "Running unit tests for content"
+docker-compose -f docker-compose-tests-unit-content.yml up --build --force-recreate
 
-echo "Running integration tests for service a"
-docker-compose -f docker-compose-integration-a.yml up --build --force-recreate \
-    --abort-on-container-exit --exit-code-from micro.integration.a
+echo "Running integration tests for tenants"
+docker-compose -f docker-compose-tests-integration-tenants.yml up --build --force-recreate --exit-code-from micro.services.tenants.integrationtests
 
-echo "Running integration tests for service b"
-docker-compose -f docker-compose-integration-b.yml up --build --force-recreate \
-    --abort-on-container-exit --exit-code-from micro.integration.b
+echo "Running integration tests for content"
+docker-compose -f docker-compose-tests-integration-content.yml up --build --force-recreate --exit-code-from micro.services.content.integrationtests
 
 echo "Running acceptance tests"
-docker-compose -f docker-compose-acceptance.yml up --build --force-recreate \
-    --abort-on-container-exit --exit-code-from micro.acceptance
+docker-compose -f docker-compose-tests-acceptance.yml up --build --force-recreate --exit-code-from micro.services.acceptancetests
+

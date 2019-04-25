@@ -1,7 +1,7 @@
 using System.IO;
 using Microsoft.Extensions.Configuration;
 
-namespace Micro.AcceptanceTests
+namespace Micro.Services.Tenants.IntegrationTests
 {
     public static class TestConfiguration
     {
@@ -16,12 +16,6 @@ namespace Micro.AcceptanceTests
               .Build();
         }
 
-        public static string TenantsAPI => _config["Tenants_API"];
-
-        public static string ContentAPI => _config["Content_API"];
-
-        public static string TenantsDB => _config["Tenants_DB"];
-
-        public static string ContentDB => _config["Content_DB"];
+        public static string ConnectionString => _config["ConnectionString"];
     }
 }

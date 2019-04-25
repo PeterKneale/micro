@@ -13,26 +13,26 @@ namespace Micro.AcceptanceTests
         }
 
         [Fact]
-        public async Task Verify_service_a_api_available()
+        public async Task Verify_tenants_api_is_available()
         {
             // arrange
             var path = "/";
 
             // act
-            var response = await _api.ServiceA.GetAsync(path);
+            var response = await _api.TenantsService.GetAsync(path);
 
             // assert
             response.EnsureSuccessStatusCode();
         }
 
         [Fact]
-        public async Task Verify_service_b_api_available()
+        public async Task Verify_content_api_is_available()
         {
             // arrange
             var path = "/";
 
             // act
-            var response = await _api.ServiceB.GetAsync(path);
+            var response = await _api.ContentService.GetAsync(path);
 
             // assert
             response.EnsureSuccessStatusCode();

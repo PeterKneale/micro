@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 using Micro.AcceptanceTests;
@@ -9,17 +9,17 @@ namespace Micro.Tests.Fixtures
     {
         public DatabaseConnectionsFixture()
         {
-            ServiceA = new SqlConnection(TestConfiguration.ServiceAConnectionString);
-            ServiceB = new SqlConnection(TestConfiguration.ServiceBConnectionString);
+            TenantsDB = new SqlConnection(TestConfiguration.TenantsDB);
+            ContentDB = new SqlConnection(TestConfiguration.ContentDB);
         }
 
         public void Dispose()
         {
-            ServiceA?.Dispose();
-            ServiceB?.Dispose();
+            TenantsDB?.Dispose();
+            ContentDB?.Dispose();
         }
 
-        public IDbConnection ServiceA { get; }
-        public IDbConnection ServiceB { get; }
+        public IDbConnection TenantsDB { get; }
+        public IDbConnection ContentDB { get; }
     }
 }

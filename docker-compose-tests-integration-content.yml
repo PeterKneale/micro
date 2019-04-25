@@ -1,16 +1,15 @@
 version: '3.4'
 
 services:
-  micro.services.tenants:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
-      - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Pass@word;persist security info=False;packet size=4096
-      - SEQ_URL=http://logs
-    ports:
-      - "5001:80"   
-      
-  micro.services.content:
+  micro.services.content.integrationtests:
+    image: micro.services.content.integrationtests
+    build:
+      context: .
+      dockerfile: src/Micro.Services.Content/Dockerfile    
+      target: integration 
+    depends_on:
+      - db
+      - logs
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
@@ -18,14 +17,19 @@ services:
       - SEQ_URL=http://logs
     ports:
       - "5002:80"   
-      
+    entrypoint:
+      - dotnet
+      - test
+
   logs:
+    image: datalust/seq:latest
     environment:
       - ACCEPT_EULA=Y
     ports:
       - "5003:80"
-      
+
   db:
+    image: microsoft/mssql-server-linux
     environment:
       - SA_PASSWORD=Pass@word
       - ACCEPT_EULA=Y

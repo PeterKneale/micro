@@ -2,20 +2,20 @@ version: '3.4'
 
 services:
 
-  micro.service.a:
-    image: micro.service.a
+  micro.services.tenants:
+    image: micro.services.tenants
     build:
       context: .
-      dockerfile: src/Micro.ServiceA/Dockerfile    
+      dockerfile: src/Micro.Services.Tenants/Dockerfile    
     depends_on:
       - db
       - logs
   
-  micro.service.b:
-    image: micro.service.b
+  micro.services.content:
+    image: micro.services.content
     build:
       context: .
-      dockerfile: src/Micro.ServiceB/Dockerfile    
+      dockerfile: src/Micro.Services.Content/Dockerfile    
     depends_on:
       - db
       - logs

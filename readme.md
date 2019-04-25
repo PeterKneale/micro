@@ -10,46 +10,13 @@
 3. Run the tests (unit, integration and acceptance)
 
 ## 1. Run everything in docker
-
-```
-# Start up the cluster
-docker-compose -f docker-compose.yml -f docker-compose.override.yml up
-
-# Shut down the cluster
-docker-compose -f docker-compose.yml -f docker-compose.override.yml down
-
-# Rebuild and start up the cluster
-docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build
-```
+`docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build --force-recreate`
 
 ## 2. Run just the infrastructure in docker
-
-```
-# Start up the infrastructure
-docker-compose -f docker-compose-infra.yml up --build
-
-# Shut down the infrastructure
-docker-compose -f docker-compose.yml down
-```
+`docker-compose -f docker-compose-infra.yml up --build --force-recreate`
 
 ## Running the tests
-```
-# Running unit tests for service a
-docker-compose -f docker-compose-unit-a.yml up --build --force-recreate --abort-on-container-exit --exit-code-from micro.unit.a
-
-# Running unit tests for service b
-docker-compose -f docker-compose-unit-b.yml up --build --force-recreate --abort-on-container-exit --exit-code-from micro.unit.b
-
-# Running integration tests for service a
-docker-compose -f docker-compose-integration-a.yml up --build --force-recreate --abort-on-container-exit --exit-code-from micro.integration.a
-
-# Running integration tests for service b
-docker-compose -f docker-compose-integration-b.yml up --build --force-recreate --abort-on-container-exit --exit-code-from micro.integration.b
-
-# Running acceptance tests
-docker-compose -f docker-compose-acceptance.yml up --build --force-recreate --abort-on-container-exit --exit-code-from micro.acceptance
-```
-
+`./tests.sh`
 
 # Exploring the endpoints
 

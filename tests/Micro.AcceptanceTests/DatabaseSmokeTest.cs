@@ -15,18 +15,18 @@ namespace Micro.AcceptanceTests
         }
 
         [Fact]
-        public void Verify_service_a_database_available()
+        public void Verify_tenants_database_available()
         {
-            _db.ServiceA.ExecuteScalar("SELECT 1;").Should()
+            _db.TenantsDB.ExecuteScalar("SELECT 1;").Should()
                 .NotBeNull().And
                 .BeOfType<int>().And
                 .Be(1);
         }
 
         [Fact]
-        public void Verify_service_b_database_available()
+        public void Verify_content_database_available()
         {
-            _db.ServiceB.ExecuteScalar("SELECT 1;").Should()
+            _db.ContentDB.ExecuteScalar("SELECT 1;").Should()
                 .NotBeNull().And
                 .BeOfType<int>().And
                 .Be(1);

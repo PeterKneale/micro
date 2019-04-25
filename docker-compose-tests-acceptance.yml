@@ -14,12 +14,14 @@ services:
       - Tenants_API=http://micro.services.tenants
       - Tenants_DB=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123*;persist security info=False;packet size=4096
       - Content_API=http://micro.services.content
-      - Content_DB=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123*;persist security info=False;packet size=4096
-      - APPVEYOR_API_URL=${APPVEYOR_API_URL}
+      - Content_DB=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123*;persist security info=False;packet size=4096  
+    volumes: 
+      - ./tests:/tests
     entrypoint:
       - dotnet
       - test
-      - --logger:Appveyor
+      - --logger
+      - trx;LogFileName=/tests/micro.services.acceptancetests.xml
 
   micro.services.tenants:
     image: micro.services.tenants

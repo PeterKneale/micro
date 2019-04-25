@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace Micro.Services.Tenants
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDatabase(_configuration.GetSqlConnectionString());
+            services.AddAutoMapper();
         }
 
         public void Configure(IApplicationBuilder app)

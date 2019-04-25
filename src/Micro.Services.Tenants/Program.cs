@@ -19,6 +19,8 @@ namespace Micro.Services.Tenants
         {
             try
             {
+                Console.Title = AppName;
+
                 SetupLogger();
 
                 Log.Information("Starting {AppName} v{AppVersion} in {EnvName}", AppName, AppVersion, EnvName);

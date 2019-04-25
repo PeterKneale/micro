@@ -8,3 +8,4 @@ namespace Micro.Services.Tenants.Controllers
         public ContentResult Index() => Content(content: $"{Program.AppName} v{Program.AppVersion} - {Program.EnvName}");
     }
 }
+

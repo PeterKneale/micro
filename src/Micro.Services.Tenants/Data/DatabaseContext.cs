@@ -11,27 +11,31 @@ namespace Micro.Services.Tenants.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TenantData>().ToTable("Tenants");
-            modelBuilder.Entity<TenantData>().HasKey(c => c.Id).HasName("PK_Tenants_Id");
-            modelBuilder.Entity<TenantData>().Property(b => b.Name).HasMaxLength(100).IsRequired();
+            modelBuilder.Entity<TenantData>(tenant =>
+            {
+                tenant.ToTable("Tenants");
+                tenant.HasKey(c => c.Id).HasName("PK_Tenant_Id");
+                tenant.Property(b => b.Name).HasMaxLength(100).IsRequired();
+            });
 
-            modelBuilder.Entity<UserData>().ToTable("Users");
-            modelBuilder.Entity<UserData>().HasKey(c => c.Id).HasName("PK_Users_Id");
-            modelBuilder.Entity<UserData>().Property(b => b.FirstName).HasMaxLength(100).IsRequired();
-            modelBuilder.Entity<UserData>().Property(b => b.LastName).HasMaxLength(100).IsRequired();
-            modelBuilder.Entity<UserData>().Property(b => b.TenantId).IsRequired();
-
-            modelBuilder.Entity<UserData>()
-                .HasOne(p => p.Tenant)
-                .WithMany(b => b.Users)
-                .HasForeignKey(p => p.TenantId)
-                .HasConstraintName("FK_User_Tenant")
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<UserData>(user =>
+            {
+                user.ToTable("Users");
+                user.HasKey(c => c.Id).HasName("PK_User_Id");
+                user.Property(b => b.FirstName).HasMaxLength(100).IsRequired();
+                user.Property(b => b.LastName).HasMaxLength(100).IsRequired();
+                user.Property(b => b.TenantId).IsRequired();
+                user.HasOne(p => p.Tenant)
+                    .WithMany(b => b.Users)
+                    .HasForeignKey(p => p.TenantId)
+                    .HasConstraintName("FK_User_Tenant")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
-        public DbSet<TenantData> Blogs { get; set; }
+        public DbSet<TenantData> Tenants { get; set; }
 
-        public DbSet<UserData> Posts { get; set; }
+        public DbSet<UserData> Users { get; set; }
     }
 
     public class BaseData

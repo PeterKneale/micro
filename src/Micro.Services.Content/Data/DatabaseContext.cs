@@ -11,22 +11,27 @@ namespace Micro.Services.Content.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BlogData>().ToTable("Blogs");
-            modelBuilder.Entity<BlogData>().HasKey(c => c.Id).HasName("PK_Blog_Id");
-            modelBuilder.Entity<BlogData>().Property(b => b.Title).HasMaxLength(100).IsRequired();
+            modelBuilder.Entity<BlogData>(blog =>
+            {
+                blog.ToTable("Blogs");
+                blog.HasKey(c => c.Id).HasName("PK_Blog_Id");
+                blog.Property(b => b.Title).HasMaxLength(100).IsRequired();
+            });
 
-            modelBuilder.Entity<PostData>().ToTable("Posts");
-            modelBuilder.Entity<PostData>().HasKey(c => c.Id).HasName("PK_Post_Id");
-            modelBuilder.Entity<PostData>().Property(b => b.Title).HasMaxLength(100).IsRequired();
-            modelBuilder.Entity<PostData>().Property(b => b.Content);
-            modelBuilder.Entity<PostData>().Property(b => b.BlogId).IsRequired();
-
-            modelBuilder.Entity<PostData>()
-                .HasOne(p => p.Blog)
-                .WithMany(b => b.Posts)
-                .HasForeignKey(p => p.BlogId)
-                .HasConstraintName("FK_Post_Blog")
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<PostData>(post =>
+            {
+                post.ToTable("Posts");
+                post.HasKey(c => c.Id).HasName("PK_Post_Id");
+                post.Property(b => b.Title).HasMaxLength(100).IsRequired();
+                post.Property(b => b.Title).HasMaxLength(100).IsRequired();
+                post.Property(b => b.Content);
+                post.Property(b => b.BlogId).IsRequired();
+                post.HasOne(p => p.Blog)
+                    .WithMany(b => b.Posts)
+                    .HasForeignKey(p => p.BlogId)
+                    .HasConstraintName("FK_Post_Blog")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
         public DbSet<BlogData> Blogs { get; set; }

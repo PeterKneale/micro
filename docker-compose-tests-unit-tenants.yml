@@ -18,5 +18,5 @@ services:
     entrypoint:
       - dotnet
       - test
-      - --logger:Appveyor
+      - --logger
       - trx;LogFileName=/tests/micro.services.tenants.unittests.xml

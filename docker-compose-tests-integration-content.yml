@@ -20,6 +20,8 @@ services:
     entrypoint:
       - dotnet
       - test
+      - --logger
+      - trx;LogFileName=/tests/micro.services.content.integrationtests.xml
 
   logs:
     image: datalust/seq:latest

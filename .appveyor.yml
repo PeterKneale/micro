@@ -16,8 +16,8 @@ build_script:
 artifacts:
   - path: '/tests/*.xml'
 on_finish:
-  - sh: find tests -type f -name '*.xml' -print0 | xargs -0 -I '{}' echo {}
-  - sh: find tests -type f -name '*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
+  - sh: find /tests/ -type f -name '*.xml' -print0 | xargs -0 -I '{}' echo {}
+  - sh: find /tests/ -type f -name '*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
 
 
 

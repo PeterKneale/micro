@@ -17,5 +17,9 @@ artifacts:
     - path: '/tests/*.xml'
 
 on_finish:
-  - curl -F 'file=@/tests/micro.services.tenants.unittests.xml' "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
+  - curl -F 'file=@/tests/micro.services.tenants.unittests.xml'        "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
+  - curl -F 'file=@/tests/micro.services.content.unittests.xml'        "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
+  - curl -F 'file=@/tests/micro.services.tenants.integrationtests.xml' "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
+  - curl -F 'file=@/tests/micro.services.content.integrationtests.xml' "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
+  - curl -F 'file=@/tests/micro.acceptancetests'                       "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
       

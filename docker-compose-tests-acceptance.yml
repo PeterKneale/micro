@@ -2,8 +2,8 @@ version: '3.4'
 
 services:
 
-  micro.services.acceptancetests:
-    image: micro.services.acceptancetests
+  micro.acceptancetests:
+    image: micro.acceptancetests
     build:
       context: .
       dockerfile: tests/Micro.AcceptanceTests/Dockerfile    
@@ -21,7 +21,7 @@ services:
       - dotnet
       - test
       - --logger
-      - trx;LogFileName=/tests/micro.services.acceptancetests.xml
+      - trx;LogFileName=/tests/micro.acceptancetests.xml
 
   micro.services.tenants:
     image: micro.services.tenants

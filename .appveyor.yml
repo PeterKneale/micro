@@ -17,5 +17,5 @@ artifacts:
     - path: '/tests/*.xml'
 
 on_finish:
-  - curl -F 'file=/tests/micro.services.tenants.unittests.xml' "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
+  - curl -F 'file=@/tests/micro.services.tenants.unittests.xml' "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
       

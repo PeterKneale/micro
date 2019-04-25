@@ -15,6 +15,8 @@ services:
       - Tenants_DB=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123*;persist security info=False;packet size=4096
       - Content_API=http://micro.services.content
       - Content_DB=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123*;persist security info=False;packet size=4096  
+    volumes: 
+      - ./tests:/tests
     entrypoint:
       - dotnet
       - test
@@ -67,6 +69,3 @@ services:
       - ACCEPT_EULA=Y
     ports:
       - "51433:1433"
-
-volumes:
-  /tests:

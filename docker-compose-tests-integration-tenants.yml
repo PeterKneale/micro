@@ -17,7 +17,9 @@ services:
       - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123*;persist security info=False;packet size=4096
       - SEQ_URL=http://logs
     ports:
-      - "5001:80"   
+      - "5001:80"
+    volumes: 
+      - ./tests:/tests
     entrypoint:
       - dotnet
       - test
@@ -37,7 +39,4 @@ services:
       - SA_PASSWORD=Password123*
       - ACCEPT_EULA=Y
     ports:
-      - "51433:1433"      
-
-volumes:
-  /tests:
+      - "51433:1433"

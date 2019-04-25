@@ -18,6 +18,8 @@ services:
       - SEQ_URL=http://logs
     ports:
       - "5002:80"   
+    volumes: 
+      - ./tests:/tests
     entrypoint:
       - dotnet
       - test
@@ -38,6 +40,3 @@ services:
       - ACCEPT_EULA=Y
     ports:
       - "51433:1433"
-
-volumes:
-  /tests:

@@ -13,6 +13,7 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123*;persist security info=False;packet size=4096
       - SEQ_URL=http://logs
+      - APPVEYOR_API_URL=${APPVEYOR_API_URL}
     entrypoint:
       - dotnet
       - test

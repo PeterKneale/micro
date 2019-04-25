@@ -12,6 +12,8 @@ namespace Micro.Services.Tenants
     public class Program
     {
         public static readonly string AppName = Assembly.GetExecutingAssembly().GetName().Name;
+        public static readonly string EnvName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        public static readonly string AppVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
 
         public static int Main(string[] args)
         {
@@ -19,16 +21,16 @@ namespace Micro.Services.Tenants
             {
                 SetupLogger();
 
-                Log.Information("Starting {AppName}", AppName);
+                Log.Information("Starting {AppName} v{AppVersion} in {EnvName}", AppName, AppVersion, EnvName);
 
                 CreateWebHostBuilder(args).Build().Run();
 
-                Log.Information("Stopped {AppName}", AppName);
+                Log.Information("Stopped {AppName} v{AppVersion} in {EnvName}", AppName, AppVersion, EnvName);
                 return 0;
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, "{AppName} crashed", AppName);
+                Log.Fatal(ex, "{AppName} v{AppVersion} crashed in {EnvName}", AppName, AppVersion, EnvName);
                 return 1;
             }
             finally
@@ -49,9 +51,11 @@ namespace Micro.Services.Tenants
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
                 .Enrich.WithProperty("AppName", AppName)
+                .Enrich.WithProperty("AppVersion", AppVersion)
+                .Enrich.WithProperty("EnvName", EnvName)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .WriteTo.Seq(configuration["SEQ_URL"])
+                .WriteTo.Seq(configuration.GetSeqUrl())
                 .CreateLogger();
         }
 
@@ -59,7 +63,8 @@ namespace Micro.Services.Tenants
         {
             return new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{EnvName}.json", true, true)
                 .AddEnvironmentVariables()
                 .Build();
         }

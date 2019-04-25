@@ -1,6 +1,3 @@
-using System;
-using System.Data;
-using System.Data.SqlClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,27 +8,30 @@ namespace Micro.Services.Content
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _environment;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
+        {
+            _configuration = configuration;
+            _environment = environment;
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddTransient<Func<IDbConnection>>(x => () => new SqlConnection(Configuration["CONNECTION_STRING"]));
+            services.AddDatabase(_configuration.GetSqlConnectionString());
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (_environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseMvc();
+            app.CreateDatabase();
         }
     }
 }

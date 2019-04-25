@@ -15,3 +15,5 @@ services:
     entrypoint:
       - dotnet
       - test
+      - "--test-adapter-path:."
+      - "--logger:Appveyor Test"

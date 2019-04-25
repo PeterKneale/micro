@@ -12,7 +12,7 @@ services:
   db:
     image: microsoft/mssql-server-linux
     environment:
-      - SA_PASSWORD=Pass@word
+      - SA_PASSWORD=Password123*
       - ACCEPT_EULA=Y
     ports:
       - "51433:1433"

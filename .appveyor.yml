@@ -17,5 +17,5 @@ artifacts:
     - path: '/tests/*.xml'
 on_finish:
   - sh: |
-      find /tests/ -type f -name '*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
+      find "tests/" -type f -name '*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/xunit/$APPVEYOR_JOB_ID"
       

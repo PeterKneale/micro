@@ -2,7 +2,7 @@
 set -e
 
 echo "Building"
-docker-compose -f docker-compose.yml build --force-recreate
+docker-compose -f docker-compose.yml build
 
 echo "Running unit tests for tenants"
 docker-compose -f docker-compose-tests-unit-tenants.yml up --build --force-recreate

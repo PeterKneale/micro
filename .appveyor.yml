@@ -8,15 +8,14 @@ install:
 build_script:
   - sh: docker-compose -f docker-compose.yml build
   - sh: docker-compose -f docker-compose-tests-unit-tenants.yml up --build --force-recreate
-#- sh: docker-compose -f docker-compose-tests-unit-content.yml up --build --force-recreate
-#- sh: docker-compose -f docker-compose-tests-integration-tenants.yml up --build --force-recreate --exit-code-from micro.services.tenants.integrationtests --abort-on-container-exit
-#- sh: docker-compose -f docker-compose-tests-integration-content.yml up --build --force-recreate --exit-code-from micro.services.content.integrationtests --abort-on-container-exit
-#- sh: docker-compose -f docker-compose-tests-acceptance.yml up --build --force-recreate --exit-code-from micro.services.acceptancetests --abort-on-container-exit
+  - sh: docker-compose -f docker-compose-tests-unit-content.yml up --build --force-recreate
+  - sh: docker-compose -f docker-compose-tests-integration-tenants.yml up --build --force-recreate --exit-code-from micro.services.tenants.integrationtests --abort-on-container-exit
+  - sh: docker-compose -f docker-compose-tests-integration-content.yml up --build --force-recreate --exit-code-from micro.services.content.integrationtests --abort-on-container-exit
+  - sh: docker-compose -f docker-compose-tests-acceptance.yml up --build --force-recreate --exit-code-from micro.services.acceptancetests --abort-on-container-exit
 
 artifacts:
   - path: '/tests/*.xml'
 on_finish:
-  - sh: find tests -type f -name '*.xml' -print0 | xargs -0 -I '{}' echo {}
   - sh: find tests -type f -name '*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/mstest/$APPVEYOR_JOB_ID"
 
 

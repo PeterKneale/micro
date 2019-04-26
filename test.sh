@@ -17,5 +17,5 @@ echo "Running integration tests for content"
 docker-compose -f docker-compose-tests-integration-content.yml up --build --force-recreate --exit-code-from micro.services.content.integrationtests --abort-on-container-exit
 
 echo "Running acceptance tests"
-docker-compose -f docker-compose-tests-acceptance.yml up --build --force-recreate --exit-code-from micro.services.acceptancetests --abort-on-container-exit
+docker-compose -f docker-compose-tests-acceptance.yml up --build --force-recreate --exit-code-from micro.acceptancetests --abort-on-container-exit
 

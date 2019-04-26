@@ -11,7 +11,7 @@ build_script:
   - sh: docker-compose -f docker-compose-tests-unit-content.yml up --build --force-recreate
   - sh: docker-compose -f docker-compose-tests-integration-tenants.yml up --build --force-recreate --exit-code-from micro.services.tenants.integrationtests --abort-on-container-exit
   - sh: docker-compose -f docker-compose-tests-integration-content.yml up --build --force-recreate --exit-code-from micro.services.content.integrationtests --abort-on-container-exit
-  - sh: docker-compose -f docker-compose-tests-acceptance.yml up --build --force-recreate --exit-code-from micro.services.acceptancetests --abort-on-container-exit
+  - sh: docker-compose -f docker-compose-tests-acceptance.yml up --build --force-recreate --exit-code-from micro.acceptancetests --abort-on-container-exit
 
 artifacts:
   - path: '/tests/*.xml'

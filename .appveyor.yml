@@ -25,7 +25,7 @@ after_test:
 deploy_script:
   - sh: docker tag micro.services.tenants peterkneale/micro.services.tenants:latest
   - sh: docker tag micro.services.content peterkneale/micro.services.content:latest
-  - sh: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - sh: docker login -u=$DOCKER_USERNAME -p=$DOCKER_PASSWORD
   - sh: docker push peterkneale/micro.services.tenants:latest
   - sh: docker push peterkneale/micro.services.content:latest
 

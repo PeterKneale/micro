@@ -17,6 +17,6 @@ services:
       - ./tests:/tests
     entrypoint:
       - dotnet
-      - test
-      - --test-adapter-path:.
-      - --logger:Appveyor
+      - test      
+      - --logger
+      - trx;LogFileName=/tests/micro.services.tenants.unittests.xml 

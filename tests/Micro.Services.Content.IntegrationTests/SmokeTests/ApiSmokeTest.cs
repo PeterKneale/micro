@@ -1,15 +1,15 @@
 using System.Threading.Tasks;
-using Micro.Services.Tenants.IntegrationTests.Fixtures;
+using Micro.Services.Content.IntegrationTests.Fixtures;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Micro.Services.Tenants.IntegrationTests
+namespace Micro.Services.Content.IntegrationTests
 {
-    public class ApiSmokeTest : IClassFixture<ApiFixture>
+    public class ApiSmokeTest : IClassFixture<HttpClientFixture>
     {
-        private readonly ApiFixture _api;
+        private readonly HttpClientFixture _api;
 
-        public ApiSmokeTest(ApiFixture api, ITestOutputHelper output)
+        public ApiSmokeTest(HttpClientFixture api, ITestOutputHelper output)
         {
             api.OutputLogsToXUnit(output);
             _api = api;

@@ -4,14 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Micro.AcceptanceTests
 {
-    public class ApiClientsFixture : IDisposable
+    public class HttpClientsFixture : IDisposable
     {
         private const string tenants_http_client_name = nameof(tenants_http_client_name);
         private const string content_http_content_name = nameof(content_http_content_name);
 
         private readonly ServiceProvider _provider;
 
-        public ApiClientsFixture()
+        public HttpClientsFixture()
         {
             var services = new ServiceCollection();
 

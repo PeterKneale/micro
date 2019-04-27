@@ -9,9 +9,9 @@ using Xunit.Abstractions;
 
 namespace Micro.Services.Tenants.IntegrationTests.Fixtures
 {
-    public class ApiFixture : WebApplicationFactory<Startup>
+    public class HttpClientFixture : WebApplicationFactory<Startup>
     {
-        public ApiFixture()
+        public HttpClientFixture()
         {
             HttpClient = CreateClient();
         }

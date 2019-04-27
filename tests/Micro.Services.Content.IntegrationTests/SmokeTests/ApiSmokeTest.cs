@@ -3,7 +3,7 @@ using Micro.Services.Content.IntegrationTests.Fixtures;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Micro.Services.Content.IntegrationTests
+namespace Micro.Services.Content.IntegrationTests.SmokeTests
 {
     public class ApiSmokeTest : IClassFixture<HttpClientFixture>
     {

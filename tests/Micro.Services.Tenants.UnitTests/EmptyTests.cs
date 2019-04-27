@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Micro.Services.Users.UnitTests
+namespace Micro.Services.Tenants.UnitTests
 {
     public class EmptyTests
     {

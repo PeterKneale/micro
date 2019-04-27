@@ -2,9 +2,11 @@ using Dapper;
 using FluentAssertions;
 using Micro.Services.Tenants.IntegrationTests.Fixtures;
 using Xunit;
+using Xunit.Extensions.Ordering;
 
-namespace Micro.Services.Content.IntegrationTests
+namespace Micro.Services.Tenants.IntegrationTests.SmokeTests
 {
+    [Order(-1)]
     public class DatabaseSmokeTest : IClassFixture<DatabaseConnectionFixture>
     {
         private readonly DatabaseConnectionFixture _db;

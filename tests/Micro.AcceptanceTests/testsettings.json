@@ -1,12 +1,12 @@
 {
-  "Tenants_API": "http://localhost:5001",
-  "Content_API": "http://localhost:5002",
+  "TENANTS_API": "http://localhost:5001",
+  "CONTENT_API": "http://localhost:5002",
 
-  "Tenants_DB": "Server=localhost\\SqlExpress;Database=Tenants;User Id=sa;Password=password",
-  "Content_DB": "Server=localhost\\SqlExpress;Database=Content;User Id=sa;Password=password",
+  "TENANTS_DB": "Server=localhost\\SqlExpress;Database=Tenants;User Id=sa;Password=password",
+  "CONTENT_DB": "Server=localhost\\SqlExpress;Database=Content;User Id=sa;Password=password",
 
   "SEQ_URL": "http://localhost:5003",
 
-  "RetryAttempts": 10,
-  "RetryInterval": 1000
+  "RETRY_ATTEMPTS": 10,
+  "RETRY_INTERVAL": 1000
 }

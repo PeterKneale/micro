@@ -17,12 +17,12 @@ namespace Micro.AcceptanceTests
 
             services.AddHttpClient(tenants_http_client_name, c =>
                 {
-                    c.BaseAddress = new Uri(TestConfiguration.TenantsAPI);
+                    c.BaseAddress = new Uri(TestSettings.TenantsAPI);
                 });
 
             services.AddHttpClient(content_http_content_name, c =>
             {
-                c.BaseAddress = new Uri(TestConfiguration.ContentAPI);
+                c.BaseAddress = new Uri(TestSettings.ContentAPI);
             });
 
             _provider = services.BuildServiceProvider();

@@ -17,7 +17,7 @@ namespace Micro.AcceptanceTests
         [Fact]
         public async Task Verify_tenants_api_is_available()
         {
-            await TestConfiguration.RetryAsync.ExecuteAsync(async () =>
+            await TestSettings.RetryAsync.ExecuteAsync(async () =>
                 (await _api.TenantsHttpClient.GetAsync("/"))
                     .EnsureSuccessStatusCode()
             );
@@ -26,7 +26,7 @@ namespace Micro.AcceptanceTests
         [Fact]
         public async Task Verify_content_api_is_available()
         {
-            await TestConfiguration.RetryAsync.ExecuteAsync(async () =>
+            await TestSettings.RetryAsync.ExecuteAsync(async () =>
                 (await _api.ContentHttpClient.GetAsync("/"))
                     .EnsureSuccessStatusCode()
             );

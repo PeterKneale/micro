@@ -20,7 +20,7 @@ namespace Micro.AcceptanceTests
         [Fact]
         public async Task Verify_tenants_database_available()
         {
-            await TestConfiguration.RetryAsync.ExecuteAsync(async () =>
+            await TestSettings.RetryAsync.ExecuteAsync(async () =>
                 (await _db.TenantsDB.ExecuteScalarAsync("SELECT 1;")).Should()
                 .NotBeNull().And
                 .BeOfType<int>().And
@@ -31,7 +31,7 @@ namespace Micro.AcceptanceTests
         [Fact]
         public async Task Verify_content_database_available()
         {
-            await TestConfiguration.RetryAsync.ExecuteAsync(async () =>
+            await TestSettings.RetryAsync.ExecuteAsync(async () =>
                 (await _db.ContentDB.ExecuteScalarAsync("SELECT 1;")).Should()
                 .NotBeNull().And
                 .BeOfType<int>().And

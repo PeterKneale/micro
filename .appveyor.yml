@@ -4,17 +4,24 @@ image: Ubuntu
 
 services:
   - docker
-  
+
+# dockerhub credentials encrypted using https://ci.appveyor.com/tools/encrypt
+environment:
+  DOCKERHUB_USERNAME:
+    secure: LqxU4Q7WAvzgttefUMYDiutEgZGF0PXY17KpUxsD/LA=
+  DOCKERHUB_PASSWORD:
+    secure: 4pugtduAvjmIJGUFRRs+xA==
+
+# install docker compsose
 install: 
   - sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 
   - sudo chmod +x /usr/local/bin/docker-compose
 
-before_build:
-  - sh: echo "%DOCKER_PASSWORD" | docker login -u="%DOCKER_USERNAME" --password-stdin
-
+# build the containers
 build_script:
   - sh: docker-compose -f docker-compose.yml build
 
+# run all test scenarios
 test_script:  
   - sh: docker-compose -f docker-compose-tests-unit-tenants.yml up --build --force-recreate
   - sh: docker-compose -f docker-compose-tests-unit-content.yml up --build --force-recreate
@@ -22,13 +29,20 @@ test_script:
   - sh: docker-compose -f docker-compose-tests-integration-content.yml up --build --force-recreate --exit-code-from micro.services.content.integrationtests --abort-on-container-exit
   - sh: docker-compose -f docker-compose-tests-acceptance.yml up --build --force-recreate --exit-code-from micro.acceptancetests --abort-on-container-exit
 
+# find test output files and post to appveyor api
+# note the format is mstest and the files were generated using `dotnet test --logger trx
+# https://www.appveyor.com/docs/running-tests/
 after_test:
   - sh: find tests -type f -name '*.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/mstest/$APPVEYOR_JOB_ID"
 
-deploy_script:
+# login to dockerhub and tag containers
+before_deploy:
+  - sh: docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
   - sh: docker tag micro.services.tenants peterkneale/micro.services.tenants:latest
   - sh: docker tag micro.services.content peterkneale/micro.services.content:latest
-  - sh: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+# tag and push all containers
+deploy_script:
   - sh: docker push peterkneale/micro.services.tenants:latest
   - sh: docker push peterkneale/micro.services.content:latest
 

@@ -14,6 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Micro.AcceptanceTests", "te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{D955E946-5B59-43A0-85AB-C48F81AA5F5A}"
 	ProjectSection(SolutionItems) = preProject
+		docker-compose-dockerhub.yml = docker-compose-dockerhub.yml
 		docker-compose-infra.yml = docker-compose-infra.yml
 		docker-compose-tests-acceptance.yml = docker-compose-tests-acceptance.yml
 		docker-compose-tests-integration-content.yml = docker-compose-tests-integration-content.yml

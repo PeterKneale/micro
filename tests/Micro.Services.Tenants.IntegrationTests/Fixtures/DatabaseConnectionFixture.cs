@@ -8,7 +8,7 @@ namespace Micro.Services.Tenants.IntegrationTests.Fixtures
     {
         public DatabaseConnectionFixture()
         {
-            Connection = new SqlConnection(TestConfiguration.ConnectionString);
+            Connection = new SqlConnection(TestSettings.ConnectionString);
         }
 
         public void Dispose()

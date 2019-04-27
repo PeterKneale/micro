@@ -2,9 +2,11 @@ using System.Threading.Tasks;
 using Micro.Services.Content.IntegrationTests.Fixtures;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Extensions.Ordering;
 
 namespace Micro.Services.Content.IntegrationTests.SmokeTests
 {
+    [Order(-1)]
     public class ApiSmokeTest : IClassFixture<HttpClientFixture>
     {
         private readonly HttpClientFixture _api;
@@ -18,8 +20,10 @@ namespace Micro.Services.Content.IntegrationTests.SmokeTests
         [Fact]
         public async Task Verify_api_available()
         {
-            var response = await _api.HttpClient.GetAsync("/");
-            response.EnsureSuccessStatusCode();
+            await TestSettings.RetryAsync.ExecuteAsync(async () =>
+                (await _api.HttpClient.GetAsync("/"))
+                    .EnsureSuccessStatusCode()
+            );
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Micro.AcceptanceTests
         {
             _config = new ConfigurationBuilder()
               .SetBasePath(Directory.GetCurrentDirectory())
-              .AddJsonFile("appsettings.json")
+              .AddJsonFile("testsettings.json")
               .AddEnvironmentVariables()
               .Build();
 

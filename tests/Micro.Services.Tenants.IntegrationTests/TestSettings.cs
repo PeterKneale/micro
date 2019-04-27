@@ -5,22 +5,22 @@ using Microsoft.Extensions.Configuration;
 using Polly;
 using Polly.Retry;
 
-namespace Micro.Services.Content.IntegrationTests
+namespace Micro.Services.Tenants.IntegrationTests
 {
-    public static class TestConfiguration
+    public static class TestSettings
     {
         private static readonly IConfiguration _config;
 
-        static TestConfiguration()
+        static TestSettings()
         {
             _config = new ConfigurationBuilder()
               .SetBasePath(Directory.GetCurrentDirectory())
-              .AddJsonFile("appsettings.json")
+              .AddJsonFile("testsettings.json")
               .AddEnvironmentVariables()
               .Build();
 
-            var retryAttempts = int.Parse(_config["RetryAttempts"]);
-            var retryInterval = int.Parse(_config["RetryInterval"]);
+            var retryAttempts = int.Parse(RetryAttempts);
+            var retryInterval = int.Parse(RetryInterval);
 
             RetryAsync = Policy
               .Handle<Exception>()
@@ -31,7 +31,9 @@ namespace Micro.Services.Content.IntegrationTests
                     Trace.WriteLine($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"));
         }
 
-        public static string ConnectionString => _config["ConnectionString"];
+        public static string ConnectionString => _config["CONNECTION_STRING"] ?? throw new Exception($"Connection string not configured");
+        public static string RetryAttempts => _config["RETRY_ATTEMPTS"] ?? throw new Exception($"Retry attempts not configured");
+        public static string RetryInterval => _config["RETRY_INTERVAL"] ?? throw new Exception($"Retry interval not configured");
 
         public static AsyncRetryPolicy RetryAsync { get; }
     }

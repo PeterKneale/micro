@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Dapper;
 using FluentAssertions;
 using Micro.Services.Content.IntegrationTests.Fixtures;
@@ -17,12 +18,14 @@ namespace Micro.Services.Content.IntegrationTests.SmokeTests
         }
 
         [Fact]
-        public void Verify_database_available()
+        public async Task Verify_database_available()
         {
-            _db.Connection.ExecuteScalar("SELECT 1;").Should()
+            await TestSettings.RetryAsync.ExecuteAsync(async () =>
+                (await _db.Connection.ExecuteScalarAsync("SELECT 1;")).Should()
                 .NotBeNull().And
                 .BeOfType<int>().And
-                .Be(1);
+                .Be(1)
+            );
         }
     }
 }

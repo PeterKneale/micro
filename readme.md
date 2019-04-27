@@ -7,10 +7,14 @@
 
 ## Run the cluster entirely in docker
 
-- Bring up the cluster
-```sh
-	docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build --force-recreate
-```
+- Bring up the cluster using local code
+    ```sh
+    docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build --force-recreate
+    ```
+- Bring up the cluster using dockerhub
+    ```sh
+    docker-compose -f docker-compose-dockerhub.yml -f docker-compose.override.yml up --force-recreate
+    ```
 
 - Exploring the endpoints
     - Tenants [http://localhost:5001](http://localhost:5001)
@@ -22,14 +26,14 @@
     - SqlServer -> `Server=localhost,51433;Database=Content;User Id=sa;Password=Password123*;`
 
 ## Run the infrastructure in docker while running the services in visual studio
-```sh
-	docker-compose -f docker-compose-infra.yml up --build --force-recreate
-```
+    ```sh
+    docker-compose -f docker-compose-infra.yml up --build --force-recreate
+    ```
 
 ## Run the tests (unit, integration and acceptance)
-```sh
-	./tests.sh
-```
+    ```sh
+    ./tests.sh
+    ```
 
 ## DockerHub
 
@@ -37,3 +41,66 @@
 - https://ci.appveyor.com/project/PeterKneale/micro
 - https://cloud.docker.com/repository/docker/peterkneale/micro.services.tenants
 - https://cloud.docker.com/repository/docker/peterkneale/micro.services.content
+
+## Kubernetes
+
+### Once off configuration
+- setup environment
+    ```sh
+    export KUBECONFIG=~/.kube/micro-kubeconfig.yaml
+    ```
+- get info
+    ```sh
+    kubectl cluster-info
+    kubectl get nodes
+    ```
+
+### Install dashboard
+- install
+    ```sh
+    kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/alternative/kubernetes-dashboard.yaml
+    kubectl apply -f k8s/dashboard-admin.yml
+    ```
+
+- run [proxy](http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy)
+    ```sh
+    kubectl proxy
+    ```
+
+### Install ingress
+- install
+    ```sh
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/mandatory.yaml
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/cloud-generic.yaml
+    ```
+
+- get it's ip
+    ```sh
+    kubectl get svc --namespace=ingress-nginx
+    ```
+
+### Install app
+- install the components
+    ```sh
+    ./install-ns.sh
+    ./install-inf.sh
+    ./install-app.sh
+    ```
+
+- test connectivity
+    ```sh
+    kubectl port-forward $(kubectl get pod --selector="component=tenants-pod" --namespace="micro-dev" --output jsonpath='{.items[0].metadata.name}') --namespace="micro-dev" 8080:80
+    kubectl port-forward $(kubectl get pod --selector="component=content-pod" --namespace="micro-dev" --output jsonpath='{.items[0].metadata.name}') --namespace="micro-dev" 8080:80
+    ```
+
+### Appveyor
+- create service account
+```sh
+    kubectl apply -f k8s/appveyor-service-account.yml
+```
+
+- get login token
+```sh
+    TOKEN=$(kubectl get secret $(kubectl get secret | grep appveyor-token | awk '{print $1}') -o jsonpath='{.data.token}' | base64 --decode)
+    echo $TOKEN
+```

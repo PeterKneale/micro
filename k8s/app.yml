@@ -1,0 +1,104 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api-ingress
+  labels:
+    component: api-ingress
+spec:
+  rules:
+  - host: tenants.micro.com
+    http:
+      paths:
+      - backend:
+          serviceName: tenants-svc
+          servicePort: 80
+  - host: content.micro.com
+    http:
+      paths:
+      - backend:
+          serviceName: content-svc
+          servicePort: 80
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tenants-svc
+  labels:
+    component: tenants-svc
+spec:
+  ports:
+    - port: 80
+  selector:
+    component: tenants-pod
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tenants-deploy-pod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: tenants-pod
+    spec:
+      containers:
+          - name: tenants-con
+            image: peterkneale/micro.services.tenants
+            env:
+              - name: ASPNETCORE_ENVIRONMENT
+                value: "Development"
+              - name: ASPNETCORE_URLS
+                value: "http://0.0.0.0:80"
+              - name: CONNECTION_STRING
+                value: "Data Source=tcp:db-svc.micro-inf.svc.cluster.local;Initial Catalog=Tenants;User Id=sa;Password=Password123*;persist security info=False;packet size=4096"
+              - name: SEQ_URL
+                value: "logs-svc.micro-inf.svc.cluster.local"
+            ports:
+              - containerPort: 80
+                name: api-port
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: content-svc
+  labels:
+    component: content-svc
+spec:
+  ports:
+    - port: 80
+  selector:
+    component: content-pod
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: content-deploy-pod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: content-pod
+    spec:
+      containers:
+          - name: content-con
+            image: peterkneale/micro.services.content
+            env:
+              - name: ASPNETCORE_ENVIRONMENT
+                value: "Development"
+              - name: ASPNETCORE_URLS
+                value: "http://0.0.0.0:80"
+              - name: CONNECTION_STRING
+                value: "Data Source=tcp:db-svc.micro-inf.svc.cluster.local;Initial Catalog=Content;User Id=sa;Password=Password123*;persist security info=False;packet size=4096"
+              - name: SEQ_URL
+                value: "logs-svc.micro-inf.svc.cluster.local"
+            ports:
+              - containerPort: 80
+                name: api-port

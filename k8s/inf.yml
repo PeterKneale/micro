@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-svc
+  labels:
+    component: db-svc
+spec:
+  ports:
+    - port: 1433
+  selector:
+    component: db-pod
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: db-deploy-pod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: db-pod
+    spec:
+      containers:
+          - name: db-con
+            image: microsoft/mssql-server-linux
+            env:
+              - name: SA_PASSWORD
+                value: "Password123*"
+              - name: ACCEPT_EULA
+                value: "Y"
+            ports:
+              - containerPort: 1433
+                name: db-port
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: logs-svc
+  labels:
+    component: logs-svc
+spec:
+  ports:
+    - port: 80
+  selector:
+    component: logs-pod
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: logs-deploy-pod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: logs-pod
+    spec:
+      containers:
+          - name: logs-con
+            image: datalust/seq:latest
+            env:
+              - name: ACCEPT_EULA
+                value: "Y"
+            ports:
+              - containerPort: 80
+                name: logs-port

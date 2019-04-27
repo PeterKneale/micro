@@ -7,6 +7,6 @@
 
   "SEQ_URL": "http://localhost:5003",
 
-  "RETRY_ATTEMPTS": 10,
+  "RETRY_ATTEMPTS": 30,
   "RETRY_INTERVAL": 1000
 }

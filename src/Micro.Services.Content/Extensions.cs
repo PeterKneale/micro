@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Diagnostics;
+using Polly;
 
 namespace Micro.Services.Content
 {
@@ -14,15 +17,40 @@ namespace Micro.Services.Content
 
         public static void CreateDatabase(this IApplicationBuilder app)
         {
-            using(var scope = app.ApplicationServices.CreateScope())
+            using (var scope = app.ApplicationServices.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                context.Database.EnsureCreated();
+                var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+                var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                var master = configuration.GetMasterSqlConnectionString();
+                int retryAttempts = 10;
+                int retryInterval = 1000;
+
+                Policy
+                    .Handle<Exception>()
+                    .WaitAndRetry(
+                        retryAttempts,
+                        retryAttempt => TimeSpan.FromMilliseconds(retryInterval),
+                        (exception, timeSpan, retryCount, context) =>
+                            Trace.WriteLine($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"))
+                    .Execute(() =>
+                    {
+                        using (var conn = new SqlConnection(master))
+                        {
+                            conn.Open();
+                            conn.Close();
+                        }
+                    });
+
+                db.Database.EnsureCreated();
             }
         }
         
         public static string GetSqlConnectionString(this IConfiguration configuration) =>
             configuration["CONNECTION_STRING"];
+
+        public static string GetMasterSqlConnectionString(this IConfiguration configuration) => 
+            new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()) { InitialCatalog = "master" }.ToString();
 
         public static string GetSqlDatabaseName(this IConfiguration configuration) =>
             new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()).InitialCatalog;

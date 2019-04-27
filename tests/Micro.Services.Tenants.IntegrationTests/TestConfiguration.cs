@@ -28,7 +28,7 @@ namespace Micro.Services.Tenants.IntegrationTests
                 retryAttempts,
                 retryAttempt => TimeSpan.FromMilliseconds(retryInterval),
                 (exception, timeSpan, retryCount, context) =>
-                    Debug.WriteLine($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"));
+                    Trace.WriteLine($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"));
         }
 
         public static string ConnectionString => _config["ConnectionString"];

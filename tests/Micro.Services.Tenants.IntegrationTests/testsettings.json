@@ -1,5 +1,5 @@
 {
   "CONNECTION_STRING": "Server=localhost\\SqlExpress;Database=Tenants;User Id=sa;Password=password",
-  "RETRY_ATTEMPTS": 10,
+  "RETRY_ATTEMPTS": 30,
   "RETRY_INTERVAL": 1000
 }

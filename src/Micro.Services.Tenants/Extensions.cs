@@ -23,7 +23,7 @@ namespace Micro.Services.Tenants
                 var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
 
                 var master = configuration.GetMasterSqlConnectionString();
-                int retryAttempts = 10;
+                int retryAttempts = 30;
                 int retryInterval = 1000;
 
                 Policy

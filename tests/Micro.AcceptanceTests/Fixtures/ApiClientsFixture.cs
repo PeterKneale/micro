@@ -6,38 +6,37 @@ namespace Micro.AcceptanceTests
 {
     public class ApiClientsFixture : IDisposable
     {
-        private const string service_tenants = "service_tenants";
-        private const string service_content = "service_content";
+        private const string tenants_http_client_name = nameof(tenants_http_client_name);
+        private const string content_http_content_name = nameof(content_http_content_name);
 
-        private static ServiceProvider _provider;
+        private readonly ServiceProvider _provider;
 
-        public HttpClient TenantsService => HttpClientFactory.Value.CreateClient(service_tenants);
-
-        public HttpClient ContentService => HttpClientFactory.Value.CreateClient(service_content);
-
-        public void Dispose()
-        {
-            _provider.Dispose();
-        }
-
-        private Lazy<IHttpClientFactory> HttpClientFactory = new Lazy<IHttpClientFactory>(() =>
+        public ApiClientsFixture()
         {
             var services = new ServiceCollection();
 
-            services.AddHttpClient(service_tenants, c =>
+            services.AddHttpClient(tenants_http_client_name, c =>
                 {
                     c.BaseAddress = new Uri(TestConfiguration.TenantsAPI);
                 });
 
-            services.AddHttpClient(service_content, c =>
+            services.AddHttpClient(content_http_content_name, c =>
             {
                 c.BaseAddress = new Uri(TestConfiguration.ContentAPI);
             });
 
             _provider = services.BuildServiceProvider();
+        }
 
-            return _provider.GetRequiredService<IHttpClientFactory>();
-        }, true);
+        public HttpClient TenantsHttpClient => GetHttpClient(tenants_http_client_name);
 
+        public HttpClient ContentHttpClient => GetHttpClient(content_http_content_name);
+
+        private HttpClient GetHttpClient(string name) => _provider.GetRequiredService<IHttpClientFactory>().CreateClient(name);
+
+        public void Dispose()
+        {
+            _provider?.Dispose();
+        }
     }
 }

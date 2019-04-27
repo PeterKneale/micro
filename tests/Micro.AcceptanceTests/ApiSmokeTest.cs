@@ -19,7 +19,7 @@ namespace Micro.AcceptanceTests
             var path = "/";
 
             // act
-            var response = await _api.TenantsService.GetAsync(path);
+            var response = await _api.TenantsHttpClient.GetAsync(path);
 
             // assert
             response.EnsureSuccessStatusCode();
@@ -32,7 +32,7 @@ namespace Micro.AcceptanceTests
             var path = "/";
 
             // act
-            var response = await _api.ContentService.GetAsync(path);
+            var response = await _api.ContentHttpClient.GetAsync(path);
 
             // assert
             response.EnsureSuccessStatusCode();

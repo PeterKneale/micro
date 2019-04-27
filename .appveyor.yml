@@ -11,8 +11,8 @@ environment:
     secure: nskdOtzA4S9nz1hvoQxjUQ==
   DOCKERHUB_PASSWORD:
     secure: 4pugtduAvjmIJGUFRRs+xA==
-  IMAGE_TENANTS: micro.services.tenants
-  IMAGE_CONTENT: micro.services.content
+  DOCKERHUB_REPO_TENANTS: micro.services.tenants
+  DOCKERHUB_REPO_CONTENT: micro.services.content
 
 # install docker compsose
 install: 
@@ -42,15 +42,15 @@ after_test:
 # login to dockerhub and tag containers
 before_deploy:
   - sh: docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
-  - sh: docker tag $IMAGE_TENANTS $DOCKER_USER/$IMAGE_TENANTS:$APPVEYOR_BUILD_NUMBER
-  - sh: docker tag $IMAGE_TENANTS $DOCKER_USER/$IMAGE_TENANTS:latest
-  - sh: docker tag $IMAGE_CONTENT $DOCKER_USER/$IMAGE_CONTENT:$APPVEYOR_BUILD_NUMBER
-  - sh: docker tag $IMAGE_CONTENT $DOCKER_USER/$IMAGE_CONTENT:latest
+  - sh: docker tag $DOCKERHUB_REPO_TENANTS $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_TENANTS:$APPVEYOR_BUILD_NUMBER
+  - sh: docker tag $DOCKERHUB_REPO_TENANTS $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_TENANTS:latest
+  - sh: docker tag $DOCKERHUB_REPO_CONTENT $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_CONTENT:$APPVEYOR_BUILD_NUMBER
+  - sh: docker tag $DOCKERHUB_REPO_CONTENT $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_CONTENT:latest
 
 # tag and push all containers
 deploy_script:
-  - sh: docker push $DOCKER_USER/$IMAGE_TENANTS
-  - sh: docker push $DOCKER_USER/$IMAGE_CONTENT
+  - sh: docker push $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_TENANTS
+  - sh: docker push $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_CONTENT
 
 artifacts:
   - path: '/tests/*.xml'

@@ -33,7 +33,7 @@ namespace Micro.Services.Tenants
             catch (Exception ex)
             {
                 Log.Fatal(ex, "{AppName} v{AppVersion} crashed in {EnvName}", AppName, AppVersion, EnvName);
-                return 1;
+                return -1;
             }
             finally
             {

@@ -10,7 +10,7 @@ environment:
   DOCKERHUB_USERNAME:
     secure: nskdOtzA4S9nz1hvoQxjUQ==
   DOCKERHUB_PASSWORD:
-    secure: 4pugtduAvjmIJGUFRRs+xA==
+    secure: Lxha1UhmqVrk3r8AVe3UZw==
   DOCKERHUB_REPO_TENANTS: micro.services.tenants
   DOCKERHUB_REPO_CONTENT: micro.services.content
 

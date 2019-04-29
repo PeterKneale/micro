@@ -59,7 +59,7 @@
 - install
     ```sh
     kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/alternative/kubernetes-dashboard.yaml
-    kubectl apply -f k8s/dashboard-admin.yml
+    kubectl apply -f k8s/setup/dashboard-admin.yml
     ```
 
 - run [proxy](http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy)

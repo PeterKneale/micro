@@ -22,7 +22,8 @@ namespace Micro.Services.Tenants
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDatabase(_configuration.GetSqlConnectionString());
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddCustomHealthChecks(_configuration.GetSqlConnectionString());
         }
 
         public void Configure(IApplicationBuilder app)
@@ -31,7 +32,8 @@ namespace Micro.Services.Tenants
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCustomHealthChecks();
+            app.UseMetaEndpoints();
             app.UseMvc();
             app.CreateDatabase();
         }

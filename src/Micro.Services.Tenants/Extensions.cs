@@ -1,12 +1,16 @@
-﻿using System;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using Micro.Services.Tenants.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using Polly;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using HealthChecks.UI.Client;
 
 namespace Micro.Services.Tenants
 {
@@ -21,6 +25,7 @@ namespace Micro.Services.Tenants
             {
                 var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
                 var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var log = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
 
                 var master = configuration.GetMasterSqlConnectionString();
                 int retryAttempts = 30;
@@ -32,7 +37,7 @@ namespace Micro.Services.Tenants
                         retryAttempts,
                         retryAttempt => TimeSpan.FromMilliseconds(retryInterval),
                         (exception, timeSpan, retryCount, context) =>
-                            Trace.WriteLine($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"))
+                            log.LogWarning($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"))
                     .Execute(() =>
                     {
                         using (var conn = new SqlConnection(master))
@@ -44,6 +49,55 @@ namespace Micro.Services.Tenants
 
                 db.Database.EnsureCreated();
             }
+        }
+
+        public static IServiceCollection AddCustomHealthChecks(this IServiceCollection services, string connectionString)
+        {
+            services.AddHealthChecksUI();
+            services.AddHealthChecks()
+                .AddCheck("api", () => HealthCheckResult.Healthy())
+                .AddSqlServer(connectionString, name: "db");
+            return services;
+        }
+
+        public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app)
+        {
+            app.UseHealthChecks("/health", new HealthCheckOptions()
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+            app.UseHealthChecks("/health/alive", new HealthCheckOptions
+            {
+                Predicate = r => r.Name == "api",
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            })
+            .UseHealthChecks("/health/ready", new HealthCheckOptions
+            {
+                Predicate = r => r.Name == "db",
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+            app.UseHealthChecksUI(c => c.UIPath = "/health/ui");
+            return app;
+        }
+
+        public static IApplicationBuilder UseMetaEndpoints(this IApplicationBuilder app)
+        {
+            app.Map("/app/name", appBuilder =>
+            {
+                appBuilder.Run(async context =>
+                {
+                    await context.Response.WriteAsync(Program.AppName);
+                });
+            });
+            app.Map("/app/version", appBuilder =>
+            {
+                appBuilder.Run(async context =>
+                {
+                    await context.Response.WriteAsync(Program.AppVersion);
+                });
+            });
+            return app;
         }
 
         public static string GetSqlConnectionString(this IConfiguration configuration) =>

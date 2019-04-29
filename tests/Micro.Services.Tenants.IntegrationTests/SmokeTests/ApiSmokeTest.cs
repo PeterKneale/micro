@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Micro.Services.Tenants.IntegrationTests.Fixtures;
 using Xunit;
@@ -17,13 +18,25 @@ namespace Micro.Services.Tenants.IntegrationTests.SmokeTests
             _api = api;
         }
 
-        [Fact]
-        public async Task Verify_api_available()
+        [Theory]
+        [MemberData(nameof(Endpoints))]
+        public async Task Verify_api_available(string url)
         {
             await TestSettings.RetryAsync.ExecuteAsync(async () =>
-                (await _api.HttpClient.GetAsync("/"))
+                (await _api.HttpClient.GetAsync(url))
                     .EnsureSuccessStatusCode()
             );
         }
+
+        public static IEnumerable<object[]> Endpoints => new List<string[]>
+        {
+            new string[] { "/" },
+            new string[] { "/health" },
+            new string[] { "/health/ui" },
+            new string[] { "/health/alive" },
+            new string[] { "/health/ready" },
+            new string[] { "/app/name" },
+            new string[] { "/app/version" },
+        };
     }
 }

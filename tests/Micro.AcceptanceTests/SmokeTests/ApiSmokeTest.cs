@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Extensions.Ordering;
@@ -14,22 +16,26 @@ namespace Micro.AcceptanceTests
             _api = api;
         }
 
-        [Fact]
-        public async Task Verify_tenants_api_is_available()
-        {
-            await TestSettings.RetryAsync.ExecuteAsync(async () =>
-                (await _api.TenantsHttpClient.GetAsync("/"))
-                    .EnsureSuccessStatusCode()
-            );
-        }
+        [Theory]
+        [MemberData(nameof(Endpoints))]
+        public async Task Verify_tenants_api_is_available(string url) => await Verify_url_is_available(_api.TenantsHttpClient, url);
 
-        [Fact]
-        public async Task Verify_content_api_is_available()
+        [Theory]
+        [MemberData(nameof(Endpoints))]
+        public async Task Verify_content_api_is_available(string url) => await Verify_url_is_available(_api.ContentHttpClient, url);
+
+        private async Task Verify_url_is_available(HttpClient client, string url) => 
+            await TestSettings.RetryAsync.ExecuteAsync(async () => (await client.GetAsync(url)).EnsureSuccessStatusCode());
+
+        public static IEnumerable<object[]> Endpoints => new List<string[]>
         {
-            await TestSettings.RetryAsync.ExecuteAsync(async () =>
-                (await _api.ContentHttpClient.GetAsync("/"))
-                    .EnsureSuccessStatusCode()
-            );
-        }
+            new string[] { "/" },
+            new string[] { "/health" },
+            new string[] { "/health/ui" },
+            new string[] { "/health/alive" },
+            new string[] { "/health/ready" },
+            new string[] { "/app/name" },
+            new string[] { "/app/version" },
+        };
     }
 }

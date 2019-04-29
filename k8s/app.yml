@@ -48,6 +48,7 @@ spec:
       containers:
           - name: tenants-con
             image: peterkneale/micro.services.tenants
+            imagePullPolicy: Always
             env:
               - name: ASPNETCORE_ENVIRONMENT
                 value: "Development"
@@ -60,6 +61,14 @@ spec:
             ports:
               - containerPort: 80
                 name: api-port
+            livenessProbe:
+              httpGet:
+                path: /health/alive
+                port: api-port
+            readinessProbe:
+              httpGet:
+                path: /health/ready
+                port: api-port
 
 ---
 apiVersion: v1
@@ -90,6 +99,7 @@ spec:
       containers:
           - name: content-con
             image: peterkneale/micro.services.content
+            imagePullPolicy: Always
             env:
               - name: ASPNETCORE_ENVIRONMENT
                 value: "Development"
@@ -102,3 +112,11 @@ spec:
             ports:
               - containerPort: 80
                 name: api-port
+            livenessProbe:
+              httpGet:
+                path: /health/alive
+                port: api-port
+            readinessProbe:
+              httpGet:
+                path: /health/ready
+                port: api-port

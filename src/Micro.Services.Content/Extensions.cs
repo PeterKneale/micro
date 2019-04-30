@@ -60,45 +60,36 @@ namespace Micro.Services.Content
             return services;
         }
 
-        public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app)
-        {
-            app.UseHealthChecks("/health", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            app.UseHealthChecks("/health/alive", new HealthCheckOptions
-            {
-                Predicate = r => r.Name == "api",
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            })
-            .UseHealthChecks("/health/ready", new HealthCheckOptions
-            {
-                Predicate = r => r.Name == "db",
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            app.UseHealthChecksUI(c=>c.UIPath = "/health/ui");
-            return app;
-        }
+        public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app) 
+            => app
+                .UseHealthChecksUI()
+                .UseHealthChecks("/health/alive", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name == "api",
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                })
+                .UseHealthChecks("/health/ready", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name == "db",
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
 
-        public static IApplicationBuilder UseMetaEndpoints(this IApplicationBuilder app)
-        {
-            app.Map("/app/name", appBuilder =>
-            {
-                appBuilder.Run(async context =>
+        public static IApplicationBuilder UseMetaEndpoints(this IApplicationBuilder app) 
+            => app
+                .Map("/app/name", appBuilder =>
                 {
-                    await context.Response.WriteAsync(Program.AppName);
-                });
-            });
-            app.Map("/app/version", appBuilder =>
-            {
-                appBuilder.Run(async context =>
+                    appBuilder.Run(async context =>
+                    {
+                        await context.Response.WriteAsync(Program.AppName);
+                    });
+                })
+                .Map("/app/version", appBuilder =>
                 {
-                    await context.Response.WriteAsync(Program.AppVersion);
+                    appBuilder.Run(async context =>
+                    {
+                        await context.Response.WriteAsync(Program.AppVersion);
+                    });
                 });
-            });
-            return app;
-        }
 
         public static string GetSqlConnectionString(this IConfiguration configuration) =>
             configuration["CONNECTION_STRING"];

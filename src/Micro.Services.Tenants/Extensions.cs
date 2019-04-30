@@ -7,10 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using Polly;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using HealthChecks.UI.Client;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Micro.Services.Tenants
 {
@@ -61,44 +61,35 @@ namespace Micro.Services.Tenants
         }
 
         public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app)
-        {
-            app.UseHealthChecks("/health", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            app.UseHealthChecks("/health/alive", new HealthCheckOptions
-            {
-                Predicate = r => r.Name == "api",
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            })
-            .UseHealthChecks("/health/ready", new HealthCheckOptions
-            {
-                Predicate = r => r.Name == "db",
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            app.UseHealthChecksUI(c => c.UIPath = "/health/ui");
-            return app;
-        }
+            => app
+                .UseHealthChecksUI()
+                .UseHealthChecks("/health/alive", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name == "api",
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                })
+                .UseHealthChecks("/health/ready", new HealthCheckOptions
+                {
+                    Predicate = r => r.Name == "db",
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
 
         public static IApplicationBuilder UseMetaEndpoints(this IApplicationBuilder app)
-        {
-            app.Map("/app/name", appBuilder =>
-            {
-                appBuilder.Run(async context =>
+            => app
+                .Map("/app/name", appBuilder =>
                 {
-                    await context.Response.WriteAsync(Program.AppName);
-                });
-            });
-            app.Map("/app/version", appBuilder =>
-            {
-                appBuilder.Run(async context =>
+                    appBuilder.Run(async context =>
+                    {
+                        await context.Response.WriteAsync(Program.AppName);
+                    });
+                })
+                .Map("/app/version", appBuilder =>
                 {
-                    await context.Response.WriteAsync(Program.AppVersion);
+                    appBuilder.Run(async context =>
+                    {
+                        await context.Response.WriteAsync(Program.AppVersion);
+                    });
                 });
-            });
-            return app;
-        }
 
         public static string GetSqlConnectionString(this IConfiguration configuration) =>
             configuration["CONNECTION_STRING"];

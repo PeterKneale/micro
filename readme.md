@@ -2,6 +2,7 @@
 - A demo of two micro services with necessary support infrastructure running within docker containers and launched by docker compose
 
 [![Build status](https://ci.appveyor.com/api/projects/status/e29quxiplixm9v7x?svg=true)](https://ci.appveyor.com/project/PeterKneale/micro)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=PeterKneale/micro)](https://dependabot.com)
 
 # Execution
 
@@ -59,7 +60,7 @@
 - install
     ```sh
     kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/alternative/kubernetes-dashboard.yaml
-    kubectl apply -f k8s/dashboard-admin.yml
+    kubectl apply -f k8s/setup/dashboard-admin.yml
     ```
 
 - run [proxy](http://localhost:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy)

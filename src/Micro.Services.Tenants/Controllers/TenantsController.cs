@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
+using Micro.Services.Tenants.Commands;
 using Micro.Services.Tenants.Data;
+using Micro.Services.Tenants.Exceptions;
 using Micro.Services.Tenants.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +15,13 @@ namespace Micro.Services.Tenants.Controllers
     [ApiController]
     public class TenantsController : ControllerBase
     {
+        private readonly IMediator _mediator;
         private readonly DatabaseContext _db;
         private readonly IMapper _map;
 
-        public TenantsController(DatabaseContext db, IMapper map)
+        public TenantsController(IMediator mediator, DatabaseContext db, IMapper map)
         {
+            _mediator = mediator;
             _db = db;
             _map = map;
         }
@@ -37,7 +42,7 @@ namespace Micro.Services.Tenants.Controllers
             var tenant = await _db.Tenants.SingleOrDefaultAsync(x => x.Id == id);
             if (tenant == null)
             {
-                return NotFound();
+                throw new NotFoundException("tenant", "id", id);
             }
             var model = _map.Map<TenantModel>(tenant);
             return Ok(model);
@@ -45,21 +50,7 @@ namespace Micro.Services.Tenants.Controllers
 
         // POST api/tenants
         [HttpPost]
-        public async Task<ActionResult<TenantModel>> PostAsync([FromBody] string name)
-        {
-            var exists = await _db.Tenants.AnyAsync(x => x.Name == name);
-            if (exists)
-            {
-                return BadRequest();
-            }
-            var data = new TenantData { Name = name };
-            await _db.Tenants.AddAsync(data);
-            await _db.SaveChangesAsync();
-
-            var tenant = await _db.Tenants.SingleAsync(x => x.Id == data.Id);
-            var model = _map.Map<TenantModel>(tenant);
-            return Ok(model);
-        }
+        public async Task<ActionResult> PostAsync([FromBody] CreateTenantCommand request) => new JsonResult(await _mediator.Send(request));
 
         // PUT api/values/5
         [HttpPut("{id}")]

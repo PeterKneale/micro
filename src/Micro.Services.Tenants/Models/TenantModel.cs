@@ -17,4 +17,10 @@ namespace Micro.Services.Tenants.Models
             CreateMap<TenantData, TenantModel>();
         }
     }
+
+    public class ErrorModel
+    {
+        public int StatusCode { get; set; }
+        public string Error { get; set; }
+    }
 }

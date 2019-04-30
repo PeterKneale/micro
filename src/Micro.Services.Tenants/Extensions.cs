@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using HealthChecks.UI.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace Micro.Services.Tenants
 {

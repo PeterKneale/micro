@@ -1,3 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: logs-ingress
+  labels:
+    component: logs-ingress
+spec:
+  rules:
+  - host: logs.mycodeonline.com
+    http:
+      paths:
+      - backend:
+          serviceName: logs-svc
+          servicePort: 80
+
+---
+
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,7 +8,7 @@ using Micro.Services.Tenants.Exceptions;
 using Micro.Services.Tenants.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Micro.Services.Tenants.Commands
+namespace Micro.Services.Tenants.Handlers
 {
     public class CreateTenantCommand : IRequest<CreateTenantResult>
     {
@@ -35,45 +35,25 @@ namespace Micro.Services.Tenants.Commands
         {
             var name = request.Name;
 
-            await CheckUnique(name);
-
-            var id = await Save(name);
-
-            var data = await Load(id);
-
-            var model = Map(data);
-
-            return new CreateTenantResult
-            {
-                Tenant = model
-            };
-        }
-        
-        private async Task CheckUnique(string name)
-        {
+            // tenant name must be unique
             var exists = await _db.Tenants.AnyAsync(x => x.Name == name);
             if (exists)
             {
                 throw new NotUniqueException("tenant", "name", name);
             }
-        }
-
-        private async Task<int> Save(string name)
-        {
+            
+            // save tenant
             var data = new TenantData { Name = name };
             await _db.Tenants.AddAsync(data);
             await _db.SaveChangesAsync();
-            return data.Id;
-        }
+            
+            // load tenant
+            var tenant = await _db.Tenants.SingleAsync(x => x.Id == data.Id);
 
-        private async Task<TenantData> Load(int id)
-        {
-            return await _db.Tenants.SingleAsync(x => x.Id == id);
-        }
-
-        private TenantModel Map(TenantData data)
-        {
-            return _map.Map<TenantModel>(data);
+            return new CreateTenantResult
+            {
+                Tenant = _map.Map<TenantModel>(tenant)
+            };
         }
     }
 }

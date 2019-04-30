@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using Micro.Services.Tenants.Commands;
+using Micro.Services.Tenants.Handlers;
 using Micro.Services.Tenants.Data;
 using Micro.Services.Tenants.Exceptions;
 using Micro.Services.Tenants.Models;

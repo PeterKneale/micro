@@ -2,6 +2,7 @@
 - A demo of two micro services with necessary support infrastructure running within docker containers and launched by docker compose
 
 [![Build status](https://ci.appveyor.com/api/projects/status/e29quxiplixm9v7x?svg=true)](https://ci.appveyor.com/project/PeterKneale/micro)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=PeterKneale/micro)](https://dependabot.com)
 
 # Execution
 

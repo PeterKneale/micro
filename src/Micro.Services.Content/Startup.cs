@@ -23,7 +23,7 @@ namespace Micro.Services.Content
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDatabase(_configuration.GetSqlConnectionString());
-            services.AddMediatR();
+            services.AddMediatR(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddCustomHealthChecks(_configuration.GetSqlConnectionString());
         }

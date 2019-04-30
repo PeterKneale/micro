@@ -1,4 +1,5 @@
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,7 @@ namespace Micro.Services.Tenants
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDatabase(_configuration.GetSqlConnectionString());
+            services.AddMediatR();
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddCustomHealthChecks(_configuration.GetSqlConnectionString());
         }

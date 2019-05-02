@@ -31,8 +31,6 @@ namespace Micro.Services.Content.IntegrationTests.SmokeTests
         public static IEnumerable<object[]> Endpoints => new List<string[]>
         {
             new string[] { "/" },
-            new string[] { "/health" },
-            new string[] { "/health/ui" },
             new string[] { "/health/alive" },
             new string[] { "/health/ready" },
             new string[] { "/app/name" },

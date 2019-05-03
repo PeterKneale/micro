@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using HealthChecks.UI.Client;
 using Micro.Services.Tenants.Data;
+using Micro.Services.Tenants.Exceptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -105,6 +106,27 @@ namespace Micro.Services.Tenants
                         }
                         var json = JsonConvert.SerializeObject(d);
                         await context.Response.WriteAsync(json);
+                    });
+                })
+                .Map("/app/errors/internal", appBuilder =>
+                {
+                    appBuilder.Run(context =>
+                    {
+                        throw new Exception("ERROR!");
+                    });
+                })
+                .Map("/app/errors/notfound", appBuilder =>
+                {
+                    appBuilder.Run(context =>
+                    {
+                        throw new NotFoundException("entity", "property", "value");
+                    });
+                })
+                .Map("/app/errors/notunique", appBuilder =>
+                {
+                    appBuilder.Run(context =>
+                    {
+                        throw new NotUniqueException("entity", "property", "value");
                     });
                 });
 

@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Micro.Services.Content.Exceptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,7 @@ namespace Micro.Services.Content
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseCustomHealthChecks();
             app.UseMetaEndpoints();
             app.UseMvc();

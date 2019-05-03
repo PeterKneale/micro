@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Micro.Services.Tenants.Exceptions
+namespace Micro.Services.Content.Exceptions
 {
     public class NotUniqueException : ApplicationException
     {

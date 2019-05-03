@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using HealthChecks.UI.Client;
 using Micro.Services.Content.Data;
+using Micro.Services.Content.Exceptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -62,7 +64,7 @@ namespace Micro.Services.Content
             return services;
         }
 
-        public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app) 
+        public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app)
             => app
                 .UseHealthChecksUI()
                 .UseHealthChecks("/health/alive", new HealthCheckOptions
@@ -76,7 +78,7 @@ namespace Micro.Services.Content
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
 
-        public static IApplicationBuilder UseMetaEndpoints(this IApplicationBuilder app) 
+        public static IApplicationBuilder UseMetaEndpoints(this IApplicationBuilder app)
             => app
                 .Map("/app/name", appBuilder =>
                 {
@@ -104,6 +106,27 @@ namespace Micro.Services.Content
                         }
                         var json = JsonConvert.SerializeObject(d);
                         await context.Response.WriteAsync(json);
+                    });
+                })
+                .Map("/app/errors/internal", appBuilder =>
+                {
+                    appBuilder.Run(context =>
+                    {
+                        throw new Exception("ERROR!");
+                    });
+                })
+                .Map("/app/errors/notfound", appBuilder =>
+                {
+                    appBuilder.Run(context =>
+                    {
+                        throw new NotFoundException("entity", "property", "value");
+                    });
+                })
+                .Map("/app/errors/notunique", appBuilder =>
+                {
+                    appBuilder.Run(context =>
+                    {
+                        throw new NotUniqueException("entity", "property", "value");
                     });
                 });
 

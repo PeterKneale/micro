@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Threading.Tasks;
-using Micro.Services.Tenants.Models;
+using Micro.Services.Content.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Micro.Services.Tenants.Exceptions
+namespace Micro.Services.Content.Exceptions
 {
     public class ExceptionMiddleware
     {

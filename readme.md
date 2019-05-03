@@ -105,3 +105,36 @@
     TOKEN=$(kubectl get secret $(kubectl get secret | grep appveyor-token | awk '{print $1}') -o jsonpath='{.data.token}' | base64 --decode)
     echo $TOKEN
 ```
+
+### Links
+
+
+- [content](http://content.mycodeonline.com)
+    - app
+        - [name](http://content.mycodeonline.com/app/name)
+        - [version](http://content.mycodeonline.com/app/version)
+        - [config](http://content.mycodeonline.com/app/config)
+    - health checks
+        - [ui](http://content.mycodeonline.com/healthchecks-ui)
+        - [alive](http://content.mycodeonline.com/health/alive)
+        - [ready](http://content.mycodeonline.com/health/ready)
+    - errors
+        - [internal](http://content.mycodeonline.com/errors/internal)
+        - [notfound](http://content.mycodeonline.com/errors/notfound)
+        - [notunique](http://content.mycodeonline.com/errors/notunique)
+
+- [tenants](http://tenants.mycodeonline.com)
+    - app
+        - [name](http://tenants.mycodeonline.com/app/name)
+        - [version](http://tenants.mycodeonline.com/app/version)
+        - [config](http://tenants.mycodeonline.com/app/config)
+    - health checks
+        - [ui](http://tenants.mycodeonline.com/healthchecks-ui)
+        - [alive](http://tenants.mycodeonline.com/health/alive)
+        - [ready](http://tenants.mycodeonline.com/health/ready)
+    - errors
+        - [internal](http://tenants.mycodeonline.com/errors/internal)
+        - [notfound](http://tenants.mycodeonline.com/errors/notfound)
+        - [notunique](http://tenants.mycodeonline.com/errors/notunique)
+
+    

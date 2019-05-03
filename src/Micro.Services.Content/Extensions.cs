@@ -108,21 +108,21 @@ namespace Micro.Services.Content
                         await context.Response.WriteAsync(json);
                     });
                 })
-                .Map("/app/errors/internal", appBuilder =>
+                .Map("/errors/internal", appBuilder =>
                 {
                     appBuilder.Run(context =>
                     {
                         throw new Exception("ERROR!");
                     });
                 })
-                .Map("/app/errors/notfound", appBuilder =>
+                .Map("/errors/notfound", appBuilder =>
                 {
                     appBuilder.Run(context =>
                     {
                         throw new NotFoundException("entity", "property", "value");
                     });
                 })
-                .Map("/app/errors/notunique", appBuilder =>
+                .Map("/errors/notunique", appBuilder =>
                 {
                     appBuilder.Run(context =>
                     {

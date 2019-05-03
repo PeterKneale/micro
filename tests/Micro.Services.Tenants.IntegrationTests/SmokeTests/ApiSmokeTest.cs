@@ -41,9 +41,9 @@ namespace Micro.Services.Tenants.IntegrationTests.SmokeTests
             new object[] { "/app/name", HttpStatusCode.OK },
             new object[] { "/app/version", HttpStatusCode.OK },
             // app errors
-            new object[] { "/app/errors/internal", HttpStatusCode.InternalServerError },
-            new object[] { "/app/errors/notfound", HttpStatusCode.NotFound },
-            new object[] { "/app/errors/notunique", HttpStatusCode.BadRequest },
+            new object[] { "/errors/internal", HttpStatusCode.InternalServerError },
+            new object[] { "/errors/notfound", HttpStatusCode.NotFound },
+            new object[] { "/errors/notunique", HttpStatusCode.BadRequest },
         };
     }
 }

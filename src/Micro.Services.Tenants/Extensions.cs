@@ -1,18 +1,19 @@
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
+using HealthChecks.UI.Client;
 using Micro.Services.Tenants.Data;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using Polly;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using HealthChecks.UI.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Net;
-using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Polly;
 
 namespace Micro.Services.Tenants
 {
@@ -90,6 +91,20 @@ namespace Micro.Services.Tenants
                     appBuilder.Run(async context =>
                     {
                         await context.Response.WriteAsync(Program.AppVersion);
+                    });
+                })
+                .Map("/app/config", appBuilder =>
+                {
+                    appBuilder.Run(async context =>
+                    {
+                        var d = new Dictionary<string, string>();
+                        var configuration = appBuilder.ApplicationServices.GetRequiredService<IConfiguration>();
+                        foreach (var entry in configuration.AsEnumerable().OrderBy(x => x.Key))
+                        {
+                            d.Add(entry.Key, entry.Value);
+                        }
+                        var json = JsonConvert.SerializeObject(d);
+                        await context.Response.WriteAsync(json);
                     });
                 });
 

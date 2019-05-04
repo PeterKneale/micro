@@ -4,8 +4,8 @@ using AutoMapper;
 using MediatR;
 using Micro.Services.Tenants.Commands;
 using Micro.Services.Tenants.Data;
-using Micro.Services.Tenants.Exceptions;
 using Micro.Services.Tenants.Models;
+using Micro.Services.Tenants.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,29 +28,18 @@ namespace Micro.Services.Tenants.Controllers
 
         // GET api/tenants
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TenantModel>>> GetAsync()
-        {
-            var tenants = await _db.Tenants.ToListAsync();
-            var models = _map.Map<IEnumerable<TenantModel>>(tenants);
-            return Ok(models);
-        }
+        public async Task<ActionResult<IEnumerable<TenantModel>>> GetAsync() 
+            => new JsonResult(await _mediator.Send(new GetTenantsQuery()));
 
-        // GET api/tenants/5
+        // GET api/tenants/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<TenantModel>> GetAsync(int id)
-        {
-            var tenant = await _db.Tenants.SingleOrDefaultAsync(x => x.Id == id);
-            if (tenant == null)
-            {
-                throw new NotFoundException("tenant", "id", id);
-            }
-            var model = _map.Map<TenantModel>(tenant);
-            return Ok(model);
-        }
+        public async Task<ActionResult<TenantModel>> GetAsync(int id) 
+            => new JsonResult(await _mediator.Send(new GetTenantQuery(id)));
 
         // POST api/tenants
         [HttpPost]
-        public async Task<ActionResult> PostAsync([FromBody] CreateTenantCommand request) => new JsonResult(await _mediator.Send(request));
+        public async Task<ActionResult> PostAsync([FromBody] CreateTenantCommand request) 
+            => new JsonResult(await _mediator.Send(request));
 
         // PUT api/values/5
         [HttpPut("{id}")]

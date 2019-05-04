@@ -34,45 +34,23 @@ namespace Micro.Services.Tenants.Commands
         {
             var name = request.Name;
 
-            await CheckUnique(name);
-
-            var id = await Save(name);
-
-            var data = await Load(id);
-
-            var model = Map(data);
-
-            return new CreateTenantResult
-            {
-                Tenant = model
-            };
-        }
-        
-        private async Task CheckUnique(string name)
-        {
+            // Check name is unique
             var exists = await _db.Tenants.AnyAsync(x => x.Name == name);
             if (exists)
             {
                 throw new NotUniqueException("tenant", "name", name);
             }
-        }
-
-        private async Task<int> Save(string name)
-        {
+            
+            // Save tenant
             var data = new TenantData { Name = name };
             await _db.Tenants.AddAsync(data);
             await _db.SaveChangesAsync();
-            return data.Id;
-        }
-
-        private async Task<TenantData> Load(int id)
-        {
-            return await _db.Tenants.SingleAsync(x => x.Id == id);
-        }
-
-        private TenantModel Map(TenantData data)
-        {
-            return _map.Map<TenantModel>(data);
+            
+            // Load tenant
+            return new CreateTenantResult
+            {
+                Tenant = _map.Map<TenantModel>(await _db.Tenants.SingleAsync(x => x.Id == data.Id))
+            };
         }
     }
 }

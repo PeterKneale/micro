@@ -27,6 +27,7 @@ namespace Micro.Services.Content
             services.AddMediatR(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddCustomHealthChecks(_configuration.GetSqlConnectionString());
+            services.AddCustomSwagger();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -37,7 +38,8 @@ namespace Micro.Services.Content
             }
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseCustomHealthChecks();
-            app.UseMetaEndpoints();
+            app.UseCustomSwagger();
+            app.UseCustomMetaEndpoints();
             app.UseMvc();
             app.CreateDatabase();
         }

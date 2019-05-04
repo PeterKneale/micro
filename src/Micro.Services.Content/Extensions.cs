@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using HealthChecks.UI.Client;
 using Micro.Services.Content.Data;
 using Micro.Services.Content.Exceptions;
@@ -15,11 +17,34 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Micro.Services.Content
 {
     public static class Extensions
     {
+        public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
+        {
+            return services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = Program.AppName, Version = "v1" });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+        }
+
+        public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Program.AppName} {Program.AppVersion}");
+                c.RoutePrefix = "";
+            });
+            return app;
+        }
+
         public static IServiceCollection AddDatabase(this IServiceCollection services, string connection) =>
             services.AddDbContext<DatabaseContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()));
 
@@ -78,7 +103,7 @@ namespace Micro.Services.Content
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
 
-        public static IApplicationBuilder UseMetaEndpoints(this IApplicationBuilder app)
+        public static IApplicationBuilder UseCustomMetaEndpoints(this IApplicationBuilder app)
             => app
                 .Map("/app/name", appBuilder =>
                 {

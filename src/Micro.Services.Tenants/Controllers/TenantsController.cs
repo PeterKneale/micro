@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Micro.Services.Tenants.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class TenantsController : ControllerBase
     {
@@ -28,16 +29,22 @@ namespace Micro.Services.Tenants.Controllers
 
         // GET api/tenants
         [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<IEnumerable<TenantModel>>> GetAsync() 
             => new JsonResult(await _mediator.Send(new GetTenantsQuery()));
 
         // GET api/tenants/{id}
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult<TenantModel>> GetAsync(int id) 
             => new JsonResult(await _mediator.Send(new GetTenantQuery(id)));
 
         // POST api/tenants
         [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         public async Task<ActionResult> PostAsync([FromBody] CreateTenantCommand request) 
             => new JsonResult(await _mediator.Send(request));
 

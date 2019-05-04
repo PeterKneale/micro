@@ -16,7 +16,7 @@ environment:
 
 dotnet_csproj:
   patch: true
-  file: 'src\**\*.csproj'
+  file: 'src/**/*.csproj'
   version: '{version}'
   package_version: '{version}'
   assembly_version: '{version}'

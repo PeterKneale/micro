@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Micro.Services.Tenants.Commands;
-using Micro.Services.Tenants.Data;
 using Micro.Services.Tenants.Models;
 using Micro.Services.Tenants.Queries;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Micro.Services.Tenants.Controllers
 {
@@ -17,14 +14,10 @@ namespace Micro.Services.Tenants.Controllers
     public class TenantsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly DatabaseContext _db;
-        private readonly IMapper _map;
-
-        public TenantsController(IMediator mediator, DatabaseContext db, IMapper map)
+        
+        public TenantsController(IMediator mediator)
         {
             _mediator = mediator;
-            _db = db;
-            _map = map;
         }
 
         // GET api/tenants
@@ -38,6 +31,7 @@ namespace Micro.Services.Tenants.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<TenantModel>> GetAsync(int id) 
             => new JsonResult(await _mediator.Send(new GetTenantQuery(id)));
 
@@ -48,37 +42,21 @@ namespace Micro.Services.Tenants.Controllers
         public async Task<ActionResult> PostAsync([FromBody] CreateTenantCommand request) 
             => new JsonResult(await _mediator.Send(request));
 
-        // PUT api/values/5
+        // PUT api/values/{id}
         [HttpPut("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<TenantModel>> PutAsync(int id, [FromBody] string name)
-        {
-            var tenant = await _db.Tenants.SingleOrDefaultAsync(x => x.Id == id);
-            if (tenant == null)
-            {
-                return NotFound();
-            }
-            tenant.Name = name;
-            await _db.Tenants.AddAsync(tenant);
-            await _db.SaveChangesAsync();
+            => new JsonResult(await _mediator.Send(new UpdateTenantCommand(id, name)));
 
-            var model = _map.Map<TenantModel>(tenant);
-            return Ok(model);
-        }
-
-        // DELETE api/values/5
+        // DELETE api/values/{id}
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         public async Task<ActionResult> DeleteAsync(int id)
-        {
-            var tenant = await _db.Tenants.SingleOrDefaultAsync(x => x.Id == id);
-            if (tenant == null)
-            {
-                return Ok();
-            }
-
-            _db.Tenants.Remove(tenant);
-            await _db.SaveChangesAsync();
-            return Ok();
-        }
+            => new JsonResult(await _mediator.Send(new DeleteTenantCommand(id)));
     }
 }
 

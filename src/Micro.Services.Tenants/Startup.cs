@@ -28,6 +28,7 @@ namespace Micro.Services.Tenants
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddCustomHealthChecks(_configuration.GetSqlConnectionString());
             services.AddCustomSwagger();
+            services.AddServices();
         }
 
         public void Configure(IApplicationBuilder app)

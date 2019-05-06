@@ -1,0 +1,7 @@
+﻿DELETE FROM [RolePermission]
+DELETE FROM [TeamRole]
+DELETE FROM [UserTeam]
+DELETE FROM [Role]
+DELETE FROM [Team]
+DELETE FROM [User]
+DELETE FROM [Tenant]

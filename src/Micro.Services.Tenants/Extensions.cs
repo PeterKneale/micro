@@ -5,8 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using HealthChecks.UI.Client;
-using Micro.Services.Tenants.Data;
+using Micro.Services.Tenants.Database;
+using Micro.Services.Tenants.DataContext;
 using Micro.Services.Tenants.Exceptions;
+using Micro.Services.Tenants.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -23,6 +25,14 @@ namespace Micro.Services.Tenants
 {
     public static class Extensions
     {
+        public static IServiceCollection AddServices(this IServiceCollection services)
+        {
+            return services
+                .AddSingleton<IHttpContextAccessor,HttpContextAccessor>()
+                .AddScoped<IUserContext, RequestContext>()
+                .AddScoped<ITenantContext, RequestContext>();
+        }
+
         public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
         {
             return services.AddSwaggerGen(c =>
@@ -31,12 +41,25 @@ namespace Micro.Services.Tenants
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+                c.CustomSchemaIds(i => i.FullName);
+                c.DescribeAllEnumsAsStrings();
             });
         }
 
         public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app)
         {
-            app.UseSwagger();
+            app.UseSwagger(c =>
+            {
+                // For postman integration
+                c.PreSerializeFilters.Add((swaggerDoc, httpReq) => {
+                    // if postman is in the query, generate a postman compatible swagger file
+                    if (httpReq.Query.ContainsKey("postman"))
+                    {
+                        swaggerDoc.Host = "{{host}}";
+                        swaggerDoc.Schemes = new string[] { "http" };
+                    }
+                });
+            });
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Program.AppName} {Program.AppVersion}");
@@ -46,14 +69,16 @@ namespace Micro.Services.Tenants
         }
 
         public static IServiceCollection AddDatabase(this IServiceCollection services, string connection) =>
-            services.AddDbContext<DatabaseContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()));
+            services
+                .AddDbContext<GlobalDbContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()))
+                .AddDbContext<TenantDbContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()));
 
         public static void CreateDatabase(this IApplicationBuilder app)
         {
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-                var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var db = scope.ServiceProvider.GetRequiredService<GlobalDbContext>();
                 var log = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
 
                 var master = configuration.GetMasterSqlConnectionString();
@@ -76,7 +101,9 @@ namespace Micro.Services.Tenants
                         }
                     });
 
-                db.Database.EnsureCreated();
+                var connection = configuration.GetSqlConnectionString();
+                var migrator = new DatabaseMigrator(connection);
+                migrator.MigrateUp();
             }
         }
 

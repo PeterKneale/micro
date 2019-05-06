@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<efcore context-namespace="Simple.Auth.Data" schema="dbo" namespace="Simple.Auth.Data" p1:Guid="c14141a0-46fb-4127-8402-b284e9b961bf" xmlns:p1="http://devart.com/schemas/EntityDeveloper/1.0">
+  <class name="Role" entity-set="Roles" table="Role" p1:Guid="0806ff87-370b-4a26-9eea-7ebba44052bd">
+    <id name="Id" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="260a05c2-aeaf-4623-9838-63942a869f63">
+      <column name="Id" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </id>
+    <property name="TenantId" type="Int32" p1:ValidateRequired="true" p1:Guid="363d0ce9-4a4a-4599-9dea-9c2696b4048c">
+      <column name="TenantId" not-null="True" precision="10" scale="0" sql-type="int" unique-key="KEY1" p1:unicode="False" />
+    </property>
+    <property name="Name" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="9cb6e902-1a80-45fd-8018-1519a3293fab">
+      <column name="Name" not-null="True" length="255" sql-type="nvarchar" unique-key="KEY1" p1:unicode="True" />
+    </property>
+  </class>
+  <class name="RolePermission" entity-set="RolePermissions" table="RolePermission" p1:Guid="a3d8fa2a-780d-49f1-8eed-c7dc7924c9d6">
+    <id name="Id" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="46b0bdcd-d392-4fd5-a0bd-cac4e9f58c4b">
+      <column name="Id" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </id>
+    <property name="TenantId" type="Int32" p1:ValidateRequired="true" p1:Guid="62cf78bb-21ed-4899-886a-b0e112d34544">
+      <column name="TenantId" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </property>
+    <property name="RoleId" type="Int32" p1:ValidateRequired="true" p1:Guid="3f03e968-4b1e-49f6-bf62-a5cd8df07424">
+      <column name="RoleId" not-null="True" precision="10" scale="0" sql-type="int" unique-key="KEY1" p1:unicode="False" />
+    </property>
+    <property name="Name" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="2baa0054-d4cd-4a9e-98bf-49d4b195311c">
+      <column name="Name" not-null="True" length="255" sql-type="nvarchar" unique-key="KEY1" p1:unicode="True" />
+    </property>
+  </class>
+  <class name="Team" entity-set="Teams" table="Team" p1:Guid="08002feb-db8c-4187-8597-eeded8f035de">
+    <id name="Id" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="5ec5b58f-bc8b-4056-8f32-8b1af17c7647">
+      <column name="Id" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </id>
+    <property name="TenantId" type="Int32" p1:ValidateRequired="true" p1:Guid="15a4ada2-23d4-42da-9491-f819e42b0b1d">
+      <column name="TenantId" not-null="True" precision="10" scale="0" sql-type="int" unique-key="KEY1" p1:unicode="False" />
+    </property>
+    <property name="Name" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="8feaaa71-f58f-41ab-bf0b-ab8a2bc6d97f">
+      <column name="Name" not-null="True" length="255" sql-type="nvarchar" unique-key="KEY1" p1:unicode="True" />
+    </property>
+  </class>
+  <class name="TeamRole" entity-set="TeamRoles" table="TeamRole" p1:Guid="1cd5b0c6-a56b-4ff5-a914-4be33266b7e2">
+    <id name="Id" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="169c35e2-a743-4496-bc1a-d178a7d621e5">
+      <column name="Id" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </id>
+    <property name="TenantId" type="Int32" p1:ValidateRequired="true" p1:Guid="af3dc198-208b-4a37-bee4-fbe5c745f358">
+      <column name="TenantId" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </property>
+    <property name="TeamId" type="Int32" p1:ValidateRequired="true" p1:Guid="dbbb4ff7-ffe2-47aa-bc5c-31d8478a4ce7">
+      <column name="TeamId" not-null="True" precision="10" scale="0" sql-type="int" unique-key="KEY1" p1:unicode="False" />
+    </property>
+    <property name="RoleId" type="Int32" p1:ValidateRequired="true" p1:Guid="d465f0ad-1d0d-447d-bd19-1ee266b009d7">
+      <column name="RoleId" not-null="True" precision="10" scale="0" sql-type="int" unique-key="KEY1" p1:unicode="False" />
+    </property>
+  </class>
+  <class name="Tenant" entity-set="Tenants" table="Tenant" p1:Guid="8edfe27a-e955-4695-930b-3eb1d4bec076">
+    <id name="Id" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="930a55b7-d063-4dfc-bd98-19eda23b3e3f">
+      <column name="Id" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </id>
+    <property name="Name" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="7746c04a-0eea-4aa3-9087-35b1e01524c9">
+      <column name="Name" not-null="True" length="255" sql-type="nvarchar" unique="True" p1:unicode="True" />
+    </property>
+    <property name="Host" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="cd51b2f9-7102-4477-8ff9-01b2fe9cd5f2">
+      <column name="Host" not-null="True" length="255" sql-type="nvarchar" unique="True" p1:unicode="True" />
+    </property>
+  </class>
+  <class name="User" entity-set="Users" table="`User`" p1:Guid="4f60ee87-bf08-4eec-b7f3-00a4fba6f07a">
+    <id name="Id" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="07992985-89f6-4bbe-b0a0-fbf683bf4798">
+      <column name="Id" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </id>
+    <property name="TenantId" type="Int32" p1:ValidateRequired="true" p1:Guid="bcccadf8-2f47-4937-a773-876ae0c6e951">
+      <column name="TenantId" not-null="True" precision="10" scale="0" sql-type="int" unique-key="KEY1" p1:unicode="False" />
+    </property>
+    <property name="FirstName" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="4231d287-d13f-4d3c-b41d-a5048cda227e">
+      <column name="FirstName" not-null="True" length="255" sql-type="nvarchar" p1:unicode="True" />
+    </property>
+    <property name="LastName" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="4d8a24c7-e648-4efc-b172-b947c2310410">
+      <column name="LastName" not-null="True" length="255" sql-type="nvarchar" p1:unicode="True" />
+    </property>
+    <property name="Email" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="64492aa7-32e5-40ea-bae4-a15209780159">
+      <column name="Email" not-null="True" length="255" sql-type="nvarchar" unique-key="KEY1" p1:unicode="True" />
+    </property>
+    <property name="Password" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="a5173c2e-42cd-4ca9-a736-21387d6df7b3">
+      <column name="Password" not-null="True" length="255" sql-type="nvarchar" p1:unicode="True" />
+    </property>
+  </class>
+  <class name="UserTeam" entity-set="UserTeams" table="UserTeam" p1:Guid="5f2f0b11-4dc1-414e-9ef9-9bd00bed0ca4">
+    <id name="Id" type="Int32" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="bbdcda4a-5df0-49f1-86ee-1a5c8663b07d">
+      <column name="Id" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </id>
+    <property name="TenantId" type="Int32" p1:ValidateRequired="true" p1:Guid="dee44ce9-713f-4b8a-9c44-4456de0f7a36">
+      <column name="TenantId" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </property>
+    <property name="UserId" type="Int32" p1:ValidateRequired="true" p1:Guid="7899414c-11d6-4c4c-871a-0cd4a8d6b27c">
+      <column name="UserId" not-null="True" precision="10" scale="0" sql-type="int" unique-key="KEY1" p1:unicode="False" />
+    </property>
+    <property name="TeamId" type="Int32" p1:ValidateRequired="true" p1:Guid="37f449c9-e954-46d0-b562-59df85e9ae29">
+      <column name="TeamId" not-null="True" precision="10" scale="0" sql-type="int" unique-key="KEY1" p1:unicode="False" />
+    </property>
+  </class>
+  <class name="UserPermission" entity-set="UserPermissions" table="UserPermissions" p1:Guid="45e35027-02f0-4c36-bd38-7eb7327c79d9">
+    <id name="UserId" type="Int32" p1:ValidateRequired="true" p1:Guid="83dd3f8d-c7cd-4eff-9b2a-7576032e81cb">
+      <column name="UserId" not-null="True" precision="10" scale="0" sql-type="int" p1:unicode="False" />
+    </id>
+    <property name="Name" type="String" p1:ValidateMaxLength="255" p1:ValidateRequired="true" p1:Guid="cb9265ab-523e-4df9-b7d2-6ea2ccf0c036">
+      <column name="Name" not-null="True" length="255" sql-type="nvarchar" p1:unicode="True" />
+    </property>
+  </class>
+  <associations>
+    <association name="Tenant_Role" cardinality="OneToMany" p1:Guid="35076bcc-445e-4a26-b39e-dbf7eb5e1a04">
+      <end1 multiplicity="One" name="Tenant" class="Role" relation-class="Tenant" constrained="True" lazy="False" p1:Guid="60705814-76a5-4076-9481-513995aa7a69">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="Roles" class="Tenant" relation-class="Role" lazy="False" p1:Guid="805f2854-58f7-464c-949f-6569153f9205">
+        <property name="TenantId" />
+      </end2>
+    </association>
+    <association name="Role_RolePermission" cardinality="OneToMany" p1:Guid="2dacae6b-fd97-48f6-99bb-d8ae8a9265d1">
+      <end1 multiplicity="One" name="Role" class="RolePermission" relation-class="Role" constrained="True" lazy="False" p1:Guid="775ce1fc-5090-4eb8-8495-5938ea482f2e">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="RolePermissions" class="Role" relation-class="RolePermission" lazy="False" p1:Guid="e176b4fc-d4c8-41fb-9907-b935613014e3">
+        <property name="RoleId" />
+      </end2>
+    </association>
+    <association name="Tenant_Team" cardinality="OneToMany" p1:Guid="b78296b6-8f87-4ca6-9e38-f626829634b5">
+      <end1 multiplicity="One" name="Tenant" class="Team" relation-class="Tenant" constrained="True" lazy="False" p1:Guid="058cc416-7b0d-494b-8cbc-f4279de08ab7">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="Teams" class="Tenant" relation-class="Team" lazy="False" p1:Guid="c83c1c6f-4b7c-4ec7-adc9-a387e30d4cb3">
+        <property name="TenantId" />
+      </end2>
+    </association>
+    <association name="Team_TeamRole" cardinality="OneToMany" p1:Guid="58a8cf8d-0677-4e16-8ed3-8ee69658806c">
+      <end1 multiplicity="One" name="Team" class="TeamRole" relation-class="Team" constrained="True" lazy="False" p1:Guid="66440b99-f04f-4f52-9f0e-3761466f49d8">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="TeamRoles" class="Team" relation-class="TeamRole" lazy="False" p1:Guid="d1c987f5-f48d-493f-b9d5-cb553b5f225a">
+        <property name="TeamId" />
+      </end2>
+    </association>
+    <association name="Role_TeamRole" cardinality="OneToMany" p1:Guid="a816910c-b4ee-4393-aa02-582856d699f6">
+      <end1 multiplicity="One" name="Role" class="TeamRole" relation-class="Role" constrained="True" lazy="False" p1:Guid="6fca12ae-49fc-4f66-9a25-d67020c88656">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="TeamRoles" class="Role" relation-class="TeamRole" lazy="False" p1:Guid="0c6ff39b-cf6f-41e2-ad30-e3d55e63edaf">
+        <property name="RoleId" />
+      </end2>
+    </association>
+    <association name="Tenant_User" cardinality="OneToMany" p1:Guid="ef3b6f0b-0647-4dec-999a-e175c15423ff">
+      <end1 multiplicity="One" name="Tenant" class="User" relation-class="Tenant" constrained="True" lazy="False" p1:Guid="44da0d1f-8e33-4e06-8548-62c999a35aea">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="Users" class="Tenant" relation-class="User" lazy="False" p1:Guid="dbbedab7-db1f-4591-98be-102caf425fdb">
+        <property name="TenantId" />
+      </end2>
+    </association>
+    <association name="User_UserTeam" cardinality="OneToMany" p1:Guid="e91c9c38-ba18-4460-86c5-7e9552239992">
+      <end1 multiplicity="One" name="User" class="UserTeam" relation-class="User" constrained="True" lazy="False" p1:Guid="4212b13a-fcbb-45b2-8854-247bcdc2c477">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="UserTeams" class="User" relation-class="UserTeam" lazy="False" p1:Guid="c129fefc-759a-4a4e-b268-e4f881a93006">
+        <property name="UserId" />
+      </end2>
+    </association>
+    <association name="Team_UserTeam" cardinality="OneToMany" p1:Guid="4cce132a-a146-491b-a4d9-344caef960f7">
+      <end1 multiplicity="One" name="Team" class="UserTeam" relation-class="Team" constrained="True" lazy="False" p1:Guid="7347d8ec-609f-43c7-8d9f-07dcc5d64f5c">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="UserTeams" class="Team" relation-class="UserTeam" lazy="False" p1:Guid="8894c5f9-c2e3-46fc-9829-58c6944de722">
+        <property name="TeamId" />
+      </end2>
+    </association>
+  </associations>
+</efcore>

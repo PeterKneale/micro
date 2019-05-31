@@ -8,7 +8,6 @@ namespace Micro.Services.Tenants
         {
             public const string TenantIdClaim = "tenant_id";
             public const string UserIdClaim = "user_id";
-            public const string TeamIdClaim = "team_id";
 
             public const string ProvisionPolicy = "provision-policy";
         }
@@ -42,6 +41,6 @@ namespace Micro.Services.Tenants
             {
                 return new string[] { Permissions.UserCreate, Permissions.UserDelete, Permissions.UserEdit, Permissions.UserView };
             }
-        }
+        }    
     }
 }

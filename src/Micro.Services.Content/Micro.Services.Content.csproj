@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <UserSecretsId>Micro.Services.Content</UserSecretsId>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 

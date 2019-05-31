@@ -8,8 +8,19 @@ namespace Micro.Services.Tenants
         {
             public const string TenantIdClaim = "tenant_id";
             public const string UserIdClaim = "user_id";
+            public const string PermissionClaim = "permission";
 
             public const string ProvisionPolicy = "provision-policy";
+        }
+
+        public class Roles
+        {
+            public const string DefaultAdministratorRole = "administrator";
+        }
+
+        public class Teams
+        {
+            public const string DefaultAdministratorsTeam = "administrators";
         }
 
         public class Permissions
@@ -23,24 +34,26 @@ namespace Micro.Services.Tenants
             public const string TeamDelete = "team.delete";
             public const string TeamEdit = "team.edit";
             public const string TeamView = "team.view";
+
+            public const string ContentCreate = "content.create";
+            public const string ContentDelete = "content.delete";
+            public const string ContentEdit = "content.edit";
+            public const string ContentView = "content.view";
         }
 
         public static class PermissionHelper
         {
-            public static string[] GetAllPermissions()
-            {
-                return GetAllTeamPermissions().Union(GetAllUserPermissions()).ToArray();
-            }
+            public static string[] AllPermissions => new string[] { }
+                .Union(AllTeamPermissions)
+                .Union(AllUserPermissions)
+                .Union(AllContentPermissions)
+                .ToArray();
 
-            public static string[] GetAllTeamPermissions()
-            {
-                return new string[] { Permissions.TeamCreate, Permissions.TeamDelete, Permissions.TeamEdit, Permissions.TeamView };
-            }
+            public static string[] AllTeamPermissions => new string[] { Permissions.TeamCreate, Permissions.TeamDelete, Permissions.TeamEdit, Permissions.TeamView };
 
-            public static string[] GetAllUserPermissions()
-            {
-                return new string[] { Permissions.UserCreate, Permissions.UserDelete, Permissions.UserEdit, Permissions.UserView };
-            }
-        }    
+            public static string[] AllUserPermissions => new string[] { Permissions.UserCreate, Permissions.UserDelete, Permissions.UserEdit, Permissions.UserView };
+
+            public static string[] AllContentPermissions => new string[] { Permissions.ContentCreate, Permissions.ContentDelete, Permissions.ContentEdit, Permissions.ContentView };
+        }
     }
 }

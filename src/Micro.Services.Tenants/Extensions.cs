@@ -4,11 +4,13 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using HealthChecks.UI.Client;
 using Micro.Services.Tenants.Database;
 using Micro.Services.Tenants.DataContext;
 using Micro.Services.Tenants.Exceptions;
 using Micro.Services.Tenants.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Polly;
 using Swashbuckle.AspNetCore.Swagger;
@@ -28,9 +31,32 @@ namespace Micro.Services.Tenants
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
-                .AddSingleton<IHttpContextAccessor,HttpContextAccessor>()
+                .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
                 .AddScoped<IUserContext, RequestContext>()
                 .AddScoped<ITenantContext, RequestContext>();
+        }
+
+        public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services
+                .AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetAuthSecret())),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+            return services;
         }
 
         public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
@@ -196,5 +222,8 @@ namespace Micro.Services.Tenants
 
         public static string GetSeqUrl(this IConfiguration configuration) =>
             configuration["SEQ_URL"];
+
+        public static string GetAuthSecret(this IConfiguration configuration) =>
+            configuration["AUTH_SECRET"];
     }
 }

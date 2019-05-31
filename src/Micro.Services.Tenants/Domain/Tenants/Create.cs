@@ -89,19 +89,19 @@ namespace Micro.Services.Tenants.Domain.Tenants
 
                     var team = new Team
                     {
-                        Name = "Administrators",
+                        Name = Constants.Teams.DefaultAdministratorsTeam,
                         TenantId = tenant.Id
                     };
                     await _db.Teams.AddAsync(team);
 
                     var role = new Role
                     {
-                        Name = "Administrator",
+                        Name = Constants.Teams.DefaultAdministratorsTeam,
                         TenantId = tenant.Id
                     };
                     await _db.Roles.AddAsync(role);
 
-                    var permissions = PermissionHelper.GetAllPermissions().Select(name => new RolePermission
+                    var permissions = PermissionHelper.AllPermissions.Select(name => new RolePermission
                     {
                         Role = role,
                         Name = name

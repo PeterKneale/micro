@@ -18,7 +18,56 @@ spec:
       - backend:
           serviceName: content-svc
           servicePort: 80
-          
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-svc
+  labels:
+    component: gateway-svc
+spec:
+  ports:
+    - port: 80
+  selector:
+    component: gateway-pod
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gateway-deploy-pod
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: gateway-pod
+    spec:
+      containers:
+          - name: gateway-con
+            image: peterkneale/micro.services.gateway:latest
+            imagePullPolicy: Always
+            env:
+              - name: ASPNETCORE_ENVIRONMENT
+                value: "Production"
+              - name: ASPNETCORE_URLS
+                value: "http://0.0.0.0:80"
+              - name: SEQ_URL
+                value: "http://logs-svc"
+            ports:
+              - containerPort: 80
+                name: api-port
+            livenessProbe:
+              httpGet:
+                path: /health/alive
+                port: api-port
+            readinessProbe:
+              httpGet:
+                path: /health/ready
+                port: api-port
+
 ---
 
 apiVersion: v1

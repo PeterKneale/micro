@@ -1,18 +1,22 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
-WORKDIR /src
-COPY ["src/Micro.Services.Gateway/Micro.Services.Gateway.csproj", "src/Micro.Services.Gateway/"]
-RUN dotnet restore "src/Micro.Services.Gateway/Micro.Services.Gateway.csproj"
+FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build
+WORKDIR /build
 COPY . .
-WORKDIR "/src/src/Micro.Services.Gateway"
-RUN dotnet build "Micro.Services.Gateway.csproj" -c Release -o /app
+WORKDIR /build/src/Micro.Services.Gateway
+RUN dotnet restore
+RUN dotnet build --no-restore -c Release -o /app
+
+FROM build as unit
+WORKDIR /build/tests/Micro.Services.Gateway.UnitTests
+
+FROM build as integration
+WORKDIR /build/tests/Micro.Services.Gateway.IntegrationTests
 
 FROM build AS publish
-RUN dotnet publish "Micro.Services.Gateway.csproj" -c Release -o /app
+RUN dotnet publish --no-restore -c Release -o /app
 
 FROM base AS final
 WORKDIR /app

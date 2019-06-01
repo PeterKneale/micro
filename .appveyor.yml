@@ -11,6 +11,7 @@ environment:
     secure: nskdOtzA4S9nz1hvoQxjUQ==
   DOCKERHUB_PASSWORD:
     secure: Lxha1UhmqVrk3r8AVe3UZw==
+  DOCKERHUB_REPO_GATEWAY: micro.services.gateway
   DOCKERHUB_REPO_TENANTS: micro.services.tenants
   DOCKERHUB_REPO_CONTENT: micro.services.content
 
@@ -51,6 +52,8 @@ after_test:
 # login to dockerhub and tag containers
 before_deploy:
   - sh: docker login -u="$DOCKERHUB_USERNAME" -p="$DOCKERHUB_PASSWORD"
+  - sh: docker tag $DOCKERHUB_REPO_GATEWAY $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_GATEWAY:1.0.$APPVEYOR_BUILD_NUMBER
+  - sh: docker tag $DOCKERHUB_REPO_GATEWAY $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_GATEWAY:latest
   - sh: docker tag $DOCKERHUB_REPO_TENANTS $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_TENANTS:1.0.$APPVEYOR_BUILD_NUMBER
   - sh: docker tag $DOCKERHUB_REPO_TENANTS $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_TENANTS:latest
   - sh: docker tag $DOCKERHUB_REPO_CONTENT $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_CONTENT:1.0.$APPVEYOR_BUILD_NUMBER
@@ -58,6 +61,7 @@ before_deploy:
 
 # tag and push all containers
 deploy_script:
+  - sh: docker push $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_GATEWAY
   - sh: docker push $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_TENANTS
   - sh: docker push $DOCKERHUB_USERNAME/$DOCKERHUB_REPO_CONTENT
 

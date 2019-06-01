@@ -3,30 +3,35 @@ using Micro.Services.Gateway.GraphQL.Types;
 
 namespace Micro.Services.Gateway.GraphQL
 {
-    public class MicroQuery : ObjectGraphType<object>
+    public class CustomQuery : ObjectGraphType<object>
     {
-        public MicroQuery(MicroData data)
+        public CustomQuery(ITenantsApi data)
         {
-            Name = "Query";
+            Name = nameof(CustomQuery);
 
-            Field<MicroUserType>(
+            Field<UserType>(
                 "User",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id", Description = "id of the User" }
                 ),
-                resolve: context =>
-                {
-                    var id = context.GetArgument<string>("id");
-                    return data.GetUserAsync(id);
-                }
-            );
+                resolve: context => data.GetUserAsync(context.GetArgument<string>("id")));
 
-            Field<MicroTeamType>(
+            Field<TeamType>(
                 "Team",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id", Description = "id of the Team" }
                 ),
                 resolve: context => data.GetTeamAsync(context.GetArgument<string>("id"))
+            );
+
+            Field< ListGraphType<TeamType>>(
+                "Teams",
+                resolve: context => data.ListTeamsAsync()
+            );
+
+            Field<ListGraphType<UserType>>(
+                "Users",
+                resolve: context => data.ListUsersAsync()
             );
         }
     }

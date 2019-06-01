@@ -11,20 +11,20 @@ using Micro.Services.Tenants.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Micro.Services.Tenants.Domain.Teams
+namespace Micro.Services.Tenants.Domain.Users
 {
     public partial class Api : ControllerBase
     {
         /// <summary>
-        /// Get team users
+        /// Get user teams
         /// </summary>
         /// <param name="id">id</param>
-        /// <returns>a a list of users in a team</returns>
-        [HttpGet("{id}/users")]
-        public async Task<ActionResult<ListUsers.Response>> GetUsers(int id) => Ok(await _mediator.Send(new ListUsers.Request(id)));
+        /// <returns>the teams a user belongs to</returns>
+        [HttpGet("{id}/teams")]
+        public async Task<ActionResult<ListTeams.Response>> GetTeams(int id) => Ok(await _mediator.Send(new ListTeams.Request(id)));
     }
 
-    public static class ListUsers
+    public static class ListTeams
     {
         public class Request : IdRequest<Response>
         {
@@ -35,7 +35,7 @@ namespace Micro.Services.Tenants.Domain.Teams
 
         public class Response
         {
-            public UserModel[] Users { get; set; }
+            public TeamModel[] Teams { get; set; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -53,25 +53,25 @@ namespace Micro.Services.Tenants.Domain.Teams
             {
                 var id = request.Id;
 
-                var team = await _db
-                    .Teams
+                var user = await _db
+                    .Users
                     .Include(u => u.UserTeams)
-                    .ThenInclude(x=>x.User)
+                    .ThenInclude(x=>x.Team)
                     .AsNoTracking()
                     .SingleOrDefaultAsync(x => x.Id == id);
 
-                if (team == null)
+                if (user == null)
                 {
-                    throw new NotFoundException("team", "id", id);
+                    throw new NotFoundException("user", "id", id);
                 }
 
-                var users = team.UserTeams
-                    .Select(x => x.User)
+                var teams = user.UserTeams
+                    .Select(x => x.Team)
                     .ToArray();
 
                 return new Response
                 {
-                    Users = _mapper.Map<User[], UserModel[]>(users)
+                    Teams = _mapper.Map<Team[], TeamModel[]>(teams)
                 };
             }
         }

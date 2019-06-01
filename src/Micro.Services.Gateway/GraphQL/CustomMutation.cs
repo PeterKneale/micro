@@ -4,16 +4,16 @@ using Micro.Services.Gateway.Models;
 
 namespace Micro.Services.Gateway.GraphQL
 {
-    public class MicroMutation : ObjectGraphType
+    public class CustomMutation : ObjectGraphType
     {
-        public MicroMutation(MicroData data)
+        public CustomMutation(ITenantsApi data)
         {
             Name = "Mutation";
 
-            Field<MicroUserType>(
+            Field<UserType>(
                 "createUser",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<MicroUserInputType>> { Name = "User" }
+                    new QueryArgument<NonNullGraphType<UserInputType>> { Name = "User" }
                 ),
                 resolve: context =>
                 {

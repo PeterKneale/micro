@@ -137,4 +137,26 @@
         - [notfound](http://tenants.mycodeonline.com/errors/notfound)
         - [notunique](http://tenants.mycodeonline.com/errors/notunique)
 
-    
+### APIs
+- [tenants]
+  - /tenants
+  - /tenants/{id}/users
+  - /users
+  - /users/{id}/teams
+  - /teams
+  - /teams/{id}/roles
+  - /roles
+  - /roles/{id}/permissions
+  
+### GraphQL Gateway
+- sample query
+```json
+	{
+	  allteams: teams {name}
+	  allusers: users {name}
+	  team1: team(id:"1") {name users {name}}  
+	  team2: team(id:"2") {name users {name}}
+	  user1: user(id:"1") {name teams {name}}  
+	  user2: user(id:"2") {name teams {name}}
+	}
+```

@@ -26,7 +26,11 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="4.0.0" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Micro.Services.Content\Micro.Services.Content.csproj" />
+    <ProjectReference Include="..\Micro.Services.Tenants\Micro.Services.Tenants.csproj" />
   </ItemGroup>
   
   <ItemGroup>
@@ -36,10 +40,6 @@
     <Content Update="appsettings.Production.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
   </ItemGroup>
   
 </Project>

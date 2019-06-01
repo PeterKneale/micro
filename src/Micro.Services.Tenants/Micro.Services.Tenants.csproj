@@ -42,20 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Database\Scripts\Migration1_Down.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Database\Scripts\Migration1_Up.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Database\Scripts\Migration2_Down.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Database\Scripts\Migration2_Up.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Database\Scripts\*.sql" />
   </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="http://json.schemastore.org/commands" /></VisualStudio></ProjectExtensions>
 
 </Project>

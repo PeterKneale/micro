@@ -2,6 +2,13 @@ version: '3.4'
 
 services:
 
+  micro.services.gateway:
+    image: peterkneale/micro.services.gateway:latest
+    depends_on:
+      - micro.services.tenants
+      - micro.services.content
+      - logs
+
   micro.services.tenants:
     image: peterkneale/micro.services.tenants:latest
     depends_on:

@@ -18,13 +18,14 @@
     ```
 
 - Exploring the endpoints
+    - Gateway [http://localhost:5000](http://localhost:5000)
     - Tenants [http://localhost:5001](http://localhost:5001)
     - Content [http://localhost:5002](http://localhost:5002)
     - Logs [http://localhost:5003](http://localhost:5003)
         - Try searching for `AppName = 'Micro.Service.Tenants'`
         - Try searching for `select count(1) from stream group by AppName`
-    - SqlServer -> `Server=localhost,51433;Database=Tenants;User Id=sa;Password=Password123*;`
-    - SqlServer -> `Server=localhost,51433;Database=Content;User Id=sa;Password=Password123*;`
+    - SqlServer -> `Server=localhost,51433;Database=Tenants;User Id=sa;Password=Password123;`
+    - SqlServer -> `Server=localhost,51433;Database=Content;User Id=sa;Password=Password123;`
 
 ## Run the infrastructure in docker while running the services in visual studio
     ```sh
@@ -40,6 +41,7 @@
 
 ### Links
 - https://ci.appveyor.com/project/PeterKneale/micro
+- https://cloud.docker.com/repository/docker/peterkneale/micro.services.gateway
 - https://cloud.docker.com/repository/docker/peterkneale/micro.services.tenants
 - https://cloud.docker.com/repository/docker/peterkneale/micro.services.content
 
@@ -90,6 +92,7 @@
 
 - test connectivity
     ```sh
+    kubectl port-forward $(kubectl get pod --selector="component=gateway-pod" --namespace="micro-dev" --output jsonpath='{.items[0].metadata.name}') --namespace="micro-dev" 8080:80
     kubectl port-forward $(kubectl get pod --selector="component=tenants-pod" --namespace="micro-dev" --output jsonpath='{.items[0].metadata.name}') --namespace="micro-dev" 8080:80
     kubectl port-forward $(kubectl get pod --selector="component=content-pod" --namespace="micro-dev" --output jsonpath='{.items[0].metadata.name}') --namespace="micro-dev" 8080:80
     ```
@@ -108,20 +111,15 @@
 
 ### Links
 
-
-- [content](http://content.mycodeonline.com)
+- [gateway](http://gateway.mycodeonline.com)
     - app
-        - [name](http://content.mycodeonline.com/app/name)
-        - [version](http://content.mycodeonline.com/app/version)
-        - [config](http://content.mycodeonline.com/app/config)
+        - [name](http://gateway.mycodeonline.com/app/name)
+        - [version](http://gateway.mycodeonline.com/app/version)
+        - [config](http://gateway.mycodeonline.com/app/config)
     - health checks
-        - [ui](http://content.mycodeonline.com/healthchecks-ui)
-        - [alive](http://content.mycodeonline.com/health/alive)
-        - [ready](http://content.mycodeonline.com/health/ready)
-    - errors
-        - [internal](http://content.mycodeonline.com/errors/internal)
-        - [notfound](http://content.mycodeonline.com/errors/notfound)
-        - [notunique](http://content.mycodeonline.com/errors/notunique)
+        - [ui](http://gateway.mycodeonline.com/healthchecks-ui)
+        - [alive](http://gateway.mycodeonline.com/health/alive)
+        - [ready](http://gateway.mycodeonline.com/health/ready)
 
 - [tenants](http://tenants.mycodeonline.com)
     - app
@@ -136,8 +134,23 @@
         - [internal](http://tenants.mycodeonline.com/errors/internal)
         - [notfound](http://tenants.mycodeonline.com/errors/notfound)
         - [notunique](http://tenants.mycodeonline.com/errors/notunique)
+		
+- [content](http://content.mycodeonline.com)
+    - app
+        - [name](http://content.mycodeonline.com/app/name)
+        - [version](http://content.mycodeonline.com/app/version)
+        - [config](http://content.mycodeonline.com/app/config)
+    - health checks
+        - [ui](http://content.mycodeonline.com/healthchecks-ui)
+        - [alive](http://content.mycodeonline.com/health/alive)
+        - [ready](http://content.mycodeonline.com/health/ready)
+    - errors
+        - [internal](http://content.mycodeonline.com/errors/internal)
+        - [notfound](http://content.mycodeonline.com/errors/notfound)
+        - [notunique](http://content.mycodeonline.com/errors/notunique)
 
 ### APIs
+
 - [tenants]
   - /tenants
   - /tenants/{id}/users
@@ -149,6 +162,7 @@
   - /roles/{id}/permissions
   
 ### GraphQL Gateway
+
 - sample query
 ```json
 	{

@@ -8,13 +8,15 @@ services:
       context: .
       dockerfile: tests/Micro.AcceptanceTests/Dockerfile    
     depends_on:
+      - micro.services.gateway
       - micro.services.tenants
       - micro.services.content
     environment:
-      - Tenants_API=http://micro.services.tenants
-      - Tenants_DB=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123*;persist security info=False;packet size=4096
-      - Content_API=http://micro.services.content
-      - Content_DB=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123*;persist security info=False;packet size=4096  
+      - Gateway_URL=http://micro.services.gateway
+      - Tenants_URL=http://micro.services.tenants
+      - Tenants_DB=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123;persist security info=False;packet size=4096
+      - Content_URL=http://micro.services.content
+      - Content_DB=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123;persist security info=False;packet size=4096  
     volumes: 
       - ./tests:/tests
     entrypoint:
@@ -22,6 +24,23 @@ services:
       - test
       - --logger
       - trx;LogFileName=/tests/micro.acceptancetests.xml
+
+  micro.services.gateway:
+    image: micro.services.gateway
+    build:
+      context: .
+      dockerfile: src/Micro.Services.Gateway/Dockerfile    
+    depends_on:
+      - db
+      - logs
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - Tenants_URL=http://micro.services.tenants
+      - Content_URL=http://micro.services.content
+      - SEQ_URL=http://logs
+    ports:
+      - "5000:80"   
 
   micro.services.tenants:
     image: micro.services.tenants
@@ -34,7 +53,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123*;persist security info=False;packet size=4096
+      - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123;persist security info=False;packet size=4096
       - SEQ_URL=http://logs
     ports:
       - "5001:80"   
@@ -50,7 +69,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123*;persist security info=False;packet size=4096
+      - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123;persist security info=False;packet size=4096
       - SEQ_URL=http://logs
     ports:
       - "5002:80"   
@@ -65,7 +84,7 @@ services:
   db:
     image: microsoft/mssql-server-linux
     environment:
-      - SA_PASSWORD=Password123*
+      - SA_PASSWORD=Password123
       - ACCEPT_EULA=Y
     ports:
       - "51433:1433"

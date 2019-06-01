@@ -30,7 +30,7 @@ namespace Micro.Services.Gateway
             services.AddAutoMapper(typeof(Startup).Assembly);
             services.AddCustomHealthChecks();
             services.AddCustomGraphQL();
-            services.AddCustomHttpClient();
+            services.AddCustomHttpClient(_configuration);
         }
 
         public void Configure(IApplicationBuilder app)

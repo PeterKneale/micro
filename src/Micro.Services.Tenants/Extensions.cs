@@ -77,7 +77,8 @@ namespace Micro.Services.Tenants
             app.UseSwagger(c =>
             {
                 // For postman integration
-                c.PreSerializeFilters.Add((swaggerDoc, httpReq) => {
+                c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+                {
                     // if postman is in the query, generate a postman compatible swagger file
                     if (httpReq.Query.ContainsKey("postman"))
                     {
@@ -107,10 +108,13 @@ namespace Micro.Services.Tenants
                 var db = scope.ServiceProvider.GetRequiredService<GlobalDbContext>();
                 var log = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
 
-                var master = configuration.GetMasterSqlConnectionString();
+                var masterConnection = configuration.GetMasterSqlConnectionString();
+                var dbConnection = configuration.GetSqlConnectionString();
+                var dbName = configuration.GetSqlDatabaseName();
+                var dbServer = configuration.GetSqlServerName();
                 int retryAttempts = 30;
                 int retryInterval = 1000;
-
+                var sql = $"IF NOT EXISTS(SELECT name FROM master.dbo.sysdatabases WHERE name = N'{dbName}') CREATE DATABASE [{dbName}]";
                 Policy
                     .Handle<Exception>()
                     .WaitAndRetry(
@@ -120,16 +124,19 @@ namespace Micro.Services.Tenants
                             log.LogWarning($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"))
                     .Execute(() =>
                     {
-                        using (var conn = new SqlConnection(master))
+                        using (var conn = new SqlConnection(masterConnection))
+                        using (var cmd = new SqlCommand(sql, conn))
                         {
+                            log.LogInformation("Connecting to {dbServer}", dbServer);
                             conn.Open();
+                            log.LogInformation("Creating database {dbName} on {dbServer}", dbName, dbServer);
+                            cmd.ExecuteNonQuery();
                             conn.Close();
                         }
                     });
 
-                var connection = configuration.GetSqlConnectionString();
-                var migrator = new DatabaseMigrator(connection);
-                migrator.MigrateUp();
+                var migrator = new DatabaseMigrator(dbConnection);
+                migrator.ReCreate();
             }
         }
 

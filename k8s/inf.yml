@@ -45,7 +45,7 @@ spec:
             image: microsoft/mssql-server-linux
             env:
               - name: SA_PASSWORD
-                value: "Password123*"
+                value: "Password123"
               - name: ACCEPT_EULA
                 value: "Y"
             ports:

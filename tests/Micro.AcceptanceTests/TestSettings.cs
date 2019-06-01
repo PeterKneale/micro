@@ -31,9 +31,9 @@ namespace Micro.AcceptanceTests
                     Trace.WriteLine($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"));
         }
 
-        public static string TenantsAPI => _config["Tenants_API"] ?? throw new Exception($"Tenants API not configured");
+        public static string TenantsAPI => _config["Tenants_URL"] ?? throw new Exception($"Tenants API not configured");
 
-        public static string ContentAPI => _config["Content_API"] ?? throw new Exception($"Content API not configured");
+        public static string ContentAPI => _config["Content_URL"] ?? throw new Exception($"Content API not configured");
 
         public static string TenantsDB => _config["Tenants_DB"] ?? throw new Exception($"Tenants DB not configured");
 

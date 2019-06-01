@@ -2,6 +2,16 @@ version: '3.4'
 
 services:
 
+  micro.services.gateway:
+    image: micro.services.gateway
+    build:
+      context: .
+      dockerfile: src/Micro.Services.Gateway/Dockerfile    
+    depends_on:
+      - micro.services.tenants
+      - micro.services.content
+      - logs
+
   micro.services.tenants:
     image: micro.services.tenants
     build:

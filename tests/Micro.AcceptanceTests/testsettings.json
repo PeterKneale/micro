@@ -1,6 +1,6 @@
 {
-  "TENANTS_API": "http://localhost:5001",
-  "CONTENT_API": "http://localhost:5002",
+  "Tenants_URL": "http://localhost:5001",
+  "Content_URL": "http://localhost:5002",
 
   "TENANTS_DB": "Server=localhost\\SqlExpress;Database=Tenants;User Id=sa;Password=password",
   "CONTENT_DB": "Server=localhost\\SqlExpress;Database=Content;User Id=sa;Password=password",

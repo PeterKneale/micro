@@ -23,7 +23,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{D955E9
 		docker-compose-tests-unit-tenants.yml = docker-compose-tests-unit-tenants.yml
 		docker-compose.override.yml = docker-compose.override.yml
 		docker-compose.yml = docker-compose.yml
-		test.sh = test.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5B474518-F3CD-4091-BCBE-AC3194C38FAE}"
@@ -37,6 +36,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CA2CCAA3-72D4-4506-B62B-4BF483EDC4F6}"
 	ProjectSection(SolutionItems) = preProject
 		.appveyor.yml = .appveyor.yml
+		docker-build.sh = docker-build.sh
+		docker-push.sh = docker-push.sh
+		docker-test.sh = docker-test.sh
 		readme.md = readme.md
 	EndProjectSection
 EndProject

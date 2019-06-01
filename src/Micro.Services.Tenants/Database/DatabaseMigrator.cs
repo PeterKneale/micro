@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using FluentMigrator.Runner;
-using Micro.Services.Tenants.Database.Migrations;
 
 namespace Micro.Services.Tenants.Database
 {

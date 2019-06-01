@@ -6,6 +6,12 @@ metadata:
     component: api-ingress
 spec:
   rules:
+  - host: gateway.mycodeonline.com
+    http:
+      paths:
+      - backend:
+          serviceName: gateway-svc
+          servicePort: 80
   - host: tenants.mycodeonline.com
     http:
       paths:
@@ -54,6 +60,10 @@ spec:
                 value: "Production"
               - name: ASPNETCORE_URLS
                 value: "http://0.0.0.0:80"
+              - name: TENANTS_URL
+                value: "http://tenants-svc"
+              - name: CONTENT_URL
+                value: "http://content-svc"
               - name: SEQ_URL
                 value: "http://logs-svc"
             ports:
@@ -105,7 +115,7 @@ spec:
               - name: ASPNETCORE_URLS
                 value: "http://0.0.0.0:80"
               - name: CONNECTION_STRING
-                value: "Data Source=db-svc;Initial Catalog=Tenants;User Id=sa;Password=Password123*;persist security info=False;packet size=4096"
+                value: "Data Source=db-svc;Initial Catalog=Tenants;User Id=sa;Password=Password123;persist security info=False;packet size=4096"
               - name: SEQ_URL
                 value: "http://logs-svc"
             ports:
@@ -156,7 +166,7 @@ spec:
               - name: ASPNETCORE_URLS
                 value: "http://0.0.0.0:80"
               - name: CONNECTION_STRING
-                value: "Data Source=db-svc;Initial Catalog=Content;User Id=sa;Password=Password123*;persist security info=False;packet size=4096"
+                value: "Data Source=db-svc;Initial Catalog=Content;User Id=sa;Password=Password123;persist security info=False;packet size=4096"
               - name: SEQ_URL
                 value: "http://logs-svc"
             ports:

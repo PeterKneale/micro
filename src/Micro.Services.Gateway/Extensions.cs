@@ -51,11 +51,11 @@ namespace Micro.Services.Gateway
             return services;
         }
 
-        public static IServiceCollection AddCustomHttpClient(this IServiceCollection services)
+        public static IServiceCollection AddCustomHttpClient(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpClient<ITenantsApi, TenantsApi>(client =>
             {
-                client.BaseAddress = new Uri("http://localhost:5001/");
+                client.BaseAddress = new Uri(configuration.GetTenantsUrl());
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("User-Agent", $"{Program.AppName}{Program.AppVersion}");
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Tenant1Jwt);
@@ -126,6 +126,12 @@ namespace Micro.Services.Gateway
 
         public static string GetSeqUrl(this IConfiguration configuration) =>
             configuration["SEQ_URL"];
+
+        public static string GetTenantsUrl(this IConfiguration configuration) =>
+            configuration["TENANTS_URL"];
+
+        public static string GetContentUrl(this IConfiguration configuration) =>
+            configuration["CONTENT_URL"];
 
         public static readonly string Tenant1Jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJ1c2VyX2lkIjoiMSIsInRlbmFudF9pZCI6IjEiLCJwZXJtaXNzaW9uIjpbInVzZXIuY3JlYXRlIiwidXNlci5kZWxldGUiLCJ1c2VyLmVkaXQiLCJ1c2VyLnZpZXciLCJ0ZWFtLmNyZWF0ZSIsInRlYW0uZGVsZXRlIiwidGVhbS5lZGl0IiwidGVhbS52aWV3Il0sIm5iZiI6MTU1OTMwNTUzMSwiZXhwIjoxNTU5OTEwMzMxLCJpYXQiOjE1NTkzMDU1MzF9.YWIbYag1P1rZScc4w49fp7EmeyoSjqZvZF1y_LQbU5k";
         public static readonly string Tenant2Jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjMiLCJ1c2VyX2lkIjoiMyIsInRlbmFudF9pZCI6IjIiLCJwZXJtaXNzaW9uIjpbInVzZXIuY3JlYXRlIiwidXNlci5kZWxldGUiLCJ1c2VyLmVkaXQiLCJ1c2VyLnZpZXciLCJ0ZWFtLmNyZWF0ZSIsInRlYW0uZGVsZXRlIiwidGVhbS5lZGl0IiwidGVhbS52aWV3Il0sIm5iZiI6MTU1OTM1MzU2OCwiZXhwIjoxNTU5OTU4MzY4LCJpYXQiOjE1NTkzNTM1Njh9.xWc7TzHS6K1D4oeb5viO9uRn9HM3acztLbJmrqtQCJg";

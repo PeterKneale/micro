@@ -125,7 +125,7 @@ namespace Micro.Services.Gateway
                 });
 
         public static string GetSeqUrl(this IConfiguration configuration) =>
-            configuration["SEQ_URL"];
+            configuration["SeqUrl"];
 
         public static string GetTenantsUrl(this IConfiguration configuration) =>
             configuration["TENANTS_URL"];

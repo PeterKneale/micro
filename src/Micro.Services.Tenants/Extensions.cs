@@ -228,7 +228,7 @@ namespace Micro.Services.Tenants
             new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()).DataSource;
 
         public static string GetSeqUrl(this IConfiguration configuration) =>
-            configuration["SEQ_URL"];
+            configuration["SeqUrl"];
 
         public static string GetAuthSecret(this IConfiguration configuration) =>
             configuration["AUTH_SECRET"];

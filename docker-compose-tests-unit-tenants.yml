@@ -11,7 +11,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionString=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123;persist security info=False;packet size=4096
+      - ConnectionString=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123*;persist security info=False;packet size=4096
       - SeqUrl=http://logs
     volumes: 
       - ./tests:/tests

@@ -24,8 +24,8 @@
     - Logs [http://localhost:5003](http://localhost:5003)
         - Try searching for `AppName = 'Micro.Service.Tenants'`
         - Try searching for `select count(1) from stream group by AppName`
-    - SqlServer -> `Server=localhost,51433;Database=Tenants;User Id=sa;Password=Password123;`
-    - SqlServer -> `Server=localhost,51433;Database=Content;User Id=sa;Password=Password123;`
+    - SqlServer -> `Server=localhost,51433;Database=Tenants;User Id=sa;Password=Password123*;`
+    - SqlServer -> `Server=localhost,51433;Database=Content;User Id=sa;Password=Password123*;`
 
 ## Run the infrastructure in docker while running the services in visual studio
     ```sh

@@ -115,7 +115,7 @@ spec:
               - name: ASPNETCORE_URLS
                 value: "http://0.0.0.0:80"
               - name: ConnectionString
-                value: "Data Source=db-svc;Initial Catalog=Tenants;User Id=sa;Password=Password123;persist security info=False;packet size=4096"
+                value: "Data Source=db-svc;Initial Catalog=Tenants;User Id=sa;Password=Password123*;persist security info=False;packet size=4096"
               - name: SeqUrl
                 value: "http://logs-svc"
             ports:
@@ -166,7 +166,7 @@ spec:
               - name: ASPNETCORE_URLS
                 value: "http://0.0.0.0:80"
               - name: ConnectionString
-                value: "Data Source=db-svc;Initial Catalog=Content;User Id=sa;Password=Password123;persist security info=False;packet size=4096"
+                value: "Data Source=db-svc;Initial Catalog=Content;User Id=sa;Password=Password123*;persist security info=False;packet size=4096"
               - name: SeqUrl
                 value: "http://logs-svc"
             ports:

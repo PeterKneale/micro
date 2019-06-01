@@ -1,12 +1,13 @@
 {
-  "Tenants_URL": "http://localhost:5001",
-  "Content_URL": "http://localhost:5002",
+  "GatewayUrl": "http://localhost:5000",
+  "TenantsUrl": "http://localhost:5001",
+  "ContentUrl": "http://localhost:5002",
 
-  "TENANTS_DB": "Server=localhost\\SqlExpress;Database=Tenants;User Id=sa;Password=password",
-  "CONTENT_DB": "Server=localhost\\SqlExpress;Database=Content;User Id=sa;Password=password",
+  "TenantsDb": "Server=localhost\\SqlExpress;Database=Tenants;User Id=sa;Password=password",
+  "ContentDb": "Server=localhost\\SqlExpress;Database=Content;User Id=sa;Password=password",
 
   "SEQ_URL": "http://localhost:5003",
 
-  "RETRY_ATTEMPTS": 30,
-  "RETRY_INTERVAL": 1000
+  "RetryAttempts": 30,
+  "RetryInterval": 1000
 }

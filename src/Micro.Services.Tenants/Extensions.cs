@@ -216,7 +216,7 @@ namespace Micro.Services.Tenants
                 });
 
         public static string GetSqlConnectionString(this IConfiguration configuration) =>
-            configuration["CONNECTION_STRING"];
+            configuration["ConnectionString"];
 
         public static string GetMasterSqlConnectionString(this IConfiguration configuration) =>
             new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()) { InitialCatalog = "master" }.ToString();

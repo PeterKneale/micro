@@ -18,11 +18,15 @@ namespace Micro.AcceptanceTests
 
         [Theory]
         [MemberData(nameof(Endpoints))]
-        public async Task Verify_Tenants_URL_is_available(string url) => await Verify_url_is_available(_api.TenantsHttpClient, url);
+        public async Task Verify_gateway_url_is_available(string url) => await Verify_url_is_available(_api.GatewayHttpClient, url);
 
         [Theory]
         [MemberData(nameof(Endpoints))]
-        public async Task Verify_Content_URL_is_available(string url) => await Verify_url_is_available(_api.ContentHttpClient, url);
+        public async Task Verify_tenants_url_is_available(string url) => await Verify_url_is_available(_api.TenantsHttpClient, url);
+
+        [Theory]
+        [MemberData(nameof(Endpoints))]
+        public async Task Verify_content_url_is_available(string url) => await Verify_url_is_available(_api.ContentHttpClient, url);
 
         private async Task Verify_url_is_available(HttpClient client, string url) => 
             await TestSettings.RetryAsync.ExecuteAsync(async () => (await client.GetAsync(url)).EnsureSuccessStatusCode());

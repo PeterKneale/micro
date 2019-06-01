@@ -7,7 +7,7 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - TENANTS_URL=http://micro.services.tenants
       - CONTENT_URL=http://micro.services.content
-      - SEQ_URL=http://logs
+      - SeqUrl=http://logs
     ports:
       - "5000:80"   
 
@@ -15,8 +15,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123;persist security info=False;packet size=4096
-      - SEQ_URL=http://logs
+      - ConnectionString=Data Source=tcp:db;Initial Catalog=Tenants;User Id=sa;Password=Password123;persist security info=False;packet size=4096
+      - SeqUrl=http://logs
     ports:
       - "5001:80"   
       
@@ -24,8 +24,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - CONNECTION_STRING=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123;persist security info=False;packet size=4096
-      - SEQ_URL=http://logs
+      - ConnectionString=Data Source=tcp:db;Initial Catalog=Content;User Id=sa;Password=Password123;persist security info=False;packet size=4096
+      - SeqUrl=http://logs
     ports:
       - "5002:80"   
       

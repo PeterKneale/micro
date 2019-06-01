@@ -64,7 +64,7 @@ spec:
                 value: "http://tenants-svc"
               - name: CONTENT_URL
                 value: "http://content-svc"
-              - name: SEQ_URL
+              - name: SeqUrl
                 value: "http://logs-svc"
             ports:
               - containerPort: 80
@@ -114,9 +114,9 @@ spec:
                 value: "Production"
               - name: ASPNETCORE_URLS
                 value: "http://0.0.0.0:80"
-              - name: CONNECTION_STRING
+              - name: ConnectionString
                 value: "Data Source=db-svc;Initial Catalog=Tenants;User Id=sa;Password=Password123;persist security info=False;packet size=4096"
-              - name: SEQ_URL
+              - name: SeqUrl
                 value: "http://logs-svc"
             ports:
               - containerPort: 80
@@ -165,9 +165,9 @@ spec:
                 value: "Production"
               - name: ASPNETCORE_URLS
                 value: "http://0.0.0.0:80"
-              - name: CONNECTION_STRING
+              - name: ConnectionString
                 value: "Data Source=db-svc;Initial Catalog=Content;User Id=sa;Password=Password123;persist security info=False;packet size=4096"
-              - name: SEQ_URL
+              - name: SeqUrl
                 value: "http://logs-svc"
             ports:
               - containerPort: 80

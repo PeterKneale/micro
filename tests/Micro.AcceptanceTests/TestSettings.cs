@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using Microsoft.Extensions.Configuration;
 using Polly;
 using Polly.Retry;
@@ -31,17 +32,19 @@ namespace Micro.AcceptanceTests
                     Trace.WriteLine($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"));
         }
 
-        public static string TenantsAPI => _config["Tenants_URL"] ?? throw new Exception($"Tenants API not configured");
+        public static string GatewayUrl => _config["GatewayUrl"] ?? throw new Exception($"GatewayUrl not configured");
 
-        public static string ContentAPI => _config["Content_URL"] ?? throw new Exception($"Content API not configured");
+        public static string TenantsUrl => _config["TenantsUrl"] ?? throw new Exception($"TenantsUrl not configured");
 
-        public static string TenantsDB => _config["Tenants_DB"] ?? throw new Exception($"Tenants DB not configured");
+        public static string ContentUrl => _config["ContentUrl"] ?? throw new Exception($"ContentUrl not configured");
+        
+        public static string TenantsDb => _config["TenantsDb"] ?? throw new Exception($"TenantsDb not configured");
 
-        public static string ContentDB => _config["Content_DB"] ?? throw new Exception($"Content DB not configured");
+        public static string ContentDb => _config["ContentDb"] ?? throw new Exception($"ContentDb not configured");
 
-        public static string RetryAttempts => _config["RETRY_ATTEMPTS"] ?? throw new Exception($"Retry attempts not configured");
+        public static string RetryAttempts => _config["RetryAttempts"] ?? throw new Exception($"RetryAttempts not configured");
 
-        public static string RetryInterval => _config["RETRY_INTERVAL"] ?? throw new Exception($"Retry interval not configured");
+        public static string RetryInterval => _config["RetryInterval"] ?? throw new Exception($"RetryInterval not configured");
 
         public static AsyncRetryPolicy RetryAsync { get; }
     }

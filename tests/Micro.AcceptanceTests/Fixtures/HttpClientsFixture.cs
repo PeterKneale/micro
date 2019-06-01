@@ -6,6 +6,7 @@ namespace Micro.AcceptanceTests
 {
     public class HttpClientsFixture : IDisposable
     {
+        private const string gateway_http_client_name = nameof(gateway_http_client_name);
         private const string tenants_http_client_name = nameof(tenants_http_client_name);
         private const string content_http_content_name = nameof(content_http_content_name);
 
@@ -15,18 +16,25 @@ namespace Micro.AcceptanceTests
         {
             var services = new ServiceCollection();
 
+            services.AddHttpClient(gateway_http_client_name, c =>
+            {
+                c.BaseAddress = new Uri(TestSettings.GatewayUrl);
+            });
+
             services.AddHttpClient(tenants_http_client_name, c =>
                 {
-                    c.BaseAddress = new Uri(TestSettings.TenantsAPI);
+                    c.BaseAddress = new Uri(TestSettings.TenantsUrl);
                 });
 
             services.AddHttpClient(content_http_content_name, c =>
             {
-                c.BaseAddress = new Uri(TestSettings.ContentAPI);
+                c.BaseAddress = new Uri(TestSettings.ContentUrl);
             });
 
             _provider = services.BuildServiceProvider();
         }
+
+        public HttpClient GatewayHttpClient => GetHttpClient(gateway_http_client_name);
 
         public HttpClient TenantsHttpClient => GetHttpClient(tenants_http_client_name);
 

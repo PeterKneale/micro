@@ -156,7 +156,7 @@ namespace Micro.Services.Content
                 });
 
         public static string GetSqlConnectionString(this IConfiguration configuration) =>
-            configuration["CONNECTION_STRING"];
+            configuration["ConnectionString"];
 
         public static string GetMasterSqlConnectionString(this IConfiguration configuration) =>
             new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()) { InitialCatalog = "master" }.ToString();
@@ -168,6 +168,6 @@ namespace Micro.Services.Content
             new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()).DataSource;
 
         public static string GetSeqUrl(this IConfiguration configuration) =>
-            configuration["SEQ_URL"];
+            configuration["SeqUrl"];
     }
 }

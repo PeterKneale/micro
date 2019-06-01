@@ -27,7 +27,7 @@ namespace Micro.Services.Tenants
             services.AddDatabase(_configuration.GetSqlConnectionString());
             services.AddMediatR(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(Startup).Assembly);
-            //services.AddCustomHealthChecks(_configuration.GetSqlConnectionString());
+            services.AddCustomHealthChecks(_configuration.GetSqlConnectionString());
             services.AddCustomSwagger();
             services.AddServices();
         }
@@ -39,7 +39,7 @@ namespace Micro.Services.Tenants
                 app.UseDeveloperExceptionPage();
             }
             app.UseMiddleware<ExceptionMiddleware>();
-            //app.UseCustomHealthChecks();
+            app.UseCustomHealthChecks();
             app.UseCustomSwagger();
             app.UseCustomMetaEndpoints();
             app.UseAuthentication();

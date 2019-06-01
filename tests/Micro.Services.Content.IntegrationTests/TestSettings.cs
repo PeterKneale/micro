@@ -31,11 +31,11 @@ namespace Micro.Services.Content.IntegrationTests
                     Trace.WriteLine($"Retry {retryCount} encountered error {exception.Message}. Delaying {timeSpan.TotalMilliseconds}ms"));
         }
 
-        public static string ConnectionString => _config["CONNECTION_STRING"] ?? throw new Exception($"Connection string not configured");
+        public static string ConnectionString => _config["ConnectionString"] ?? throw new Exception($"Connection string not configured");
 
-        public static string RetryAttempts => _config["RETRY_ATTEMPTS"] ?? throw new Exception($"Retry attempts not configured");
+        public static string RetryAttempts => _config["RetryAttempts"] ?? throw new Exception($"Retry attempts not configured");
 
-        public static string RetryInterval => _config["RETRY_INTERVAL"] ?? throw new Exception($"Retry interval not configured");
+        public static string RetryInterval => _config["RetryInterval"] ?? throw new Exception($"Retry interval not configured");
 
         public static AsyncRetryPolicy RetryAsync { get; }
     }

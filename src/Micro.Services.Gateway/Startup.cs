@@ -46,7 +46,7 @@ namespace Micro.Services.Gateway
             app.UseGraphQL<ISchema>("/graphql");
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions
             {
-                Path = "/playground"
+                Path = "/"
             });
             app.UseMvc();
         }

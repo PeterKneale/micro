@@ -9,8 +9,8 @@ namespace Micro.Tests.Fixtures
     {
         public DatabaseConnectionsFixture()
         {
-            TenantsDB = new SqlConnection(TestSettings.TenantsDB);
-            ContentDB = new SqlConnection(TestSettings.ContentDB);
+            TenantsDB = new SqlConnection(TestSettings.TenantsDb);
+            ContentDB = new SqlConnection(TestSettings.ContentDb);
         }
 
         public void Dispose()

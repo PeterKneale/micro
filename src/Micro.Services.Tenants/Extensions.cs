@@ -152,7 +152,7 @@ namespace Micro.Services.Tenants
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var migrator = scope.ServiceProvider.GetRequiredService<IDatabaseMigrator>();
-                migrator.ReCreate();
+                migrator.MigrateUp();
             }
         }
 

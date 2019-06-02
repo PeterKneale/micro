@@ -26,7 +26,6 @@ namespace Micro.Services.Tenants.Services
             if (claim == null)
             {
                 throw new Exception($"No {type} claim found");
-
             }
             var id = int.Parse(claim.Value);
             return id;

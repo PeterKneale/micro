@@ -9,8 +9,6 @@ namespace Micro.Services.Tenants
             public const string TenantIdClaim = "tenant_id";
             public const string UserIdClaim = "user_id";
             public const string PermissionClaim = "permission";
-
-            public const string ProvisionPolicy = "provision-policy";
         }
 
         public class Roles

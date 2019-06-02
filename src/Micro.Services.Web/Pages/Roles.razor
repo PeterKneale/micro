@@ -1,0 +1,38 @@
+﻿@page "/Roles"
+@inject IGatewayApi Api
+
+<h1>Roles</h1>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+
+@if (!IsLoading)
+{
+    @foreach (var role in _model.Roles)
+    {
+        <li>@role.Name]</li>
+    }
+}
+
+@functions{
+
+    private PageModel _model;
+    private bool IsLoading => _model == null;
+
+    protected async override Task OnInitAsync()
+    {
+        _model = await Api.ExecuteGraphQuery<PageModel>("{ roles { name } }");
+    }
+
+    public class PageModel
+    {
+        public IEnumerable<RoleModel> Roles { get; set; }
+    }
+
+    public class RoleModel
+    {
+        public string Name { get; set; }
+    }
+}

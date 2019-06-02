@@ -1,0 +1,39 @@
+﻿@page "/Teams"
+@inject IGatewayApi Api
+
+<h1>Teams</h1>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+
+@if (!IsLoading)
+{
+    @foreach (var team in _model.Teams)
+    {
+        <li>@team.Name</li>
+    }
+}
+
+@functions
+{
+    private PageModel _model;
+
+    private bool IsLoading => _model == null;
+
+    protected async override Task OnInitAsync()
+    {
+        _model = await Api.ExecuteGraphQuery<PageModel>("{ teams { name } }");
+    }
+
+    public class PageModel
+    {
+        public IEnumerable<TeamModel> Teams { get; set; }
+    }
+
+    public class TeamModel
+    {
+        public string Name { get; set; }
+    }
+}

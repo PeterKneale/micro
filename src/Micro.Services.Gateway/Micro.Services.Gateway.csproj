@@ -30,6 +30,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Micro.Services.Content\Micro.Services.Content.csproj" />
+    <ProjectReference Include="..\Micro.Services.Gateway.Models\Micro.Services.Gateway.Models.csproj" />
     <ProjectReference Include="..\Micro.Services.Tenants\Micro.Services.Tenants.csproj" />
   </ItemGroup>
   

@@ -25,6 +25,7 @@ namespace Micro.Services.Gateway
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddMediatR(typeof(Startup).Assembly);
             services.AddAutoMapper(typeof(Startup).Assembly);
@@ -39,6 +40,12 @@ namespace Micro.Services.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(c =>
+            {
+                c.AllowAnyOrigin();
+                c.AllowAnyMethod();
+                c.AllowAnyHeader();
+            });
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseCustomHealthChecks();
             app.UseCustomMetaEndpoints();

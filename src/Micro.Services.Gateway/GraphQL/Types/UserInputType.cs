@@ -8,7 +8,8 @@ namespace Micro.Services.Gateway.GraphQL.Types
         public UserInputType()
         {
             Name = "UserInput";
-            Field(x => x.Name);
+            Field(x => x.FirstName);
+            Field(x => x.LastName);
         }
     }
 }

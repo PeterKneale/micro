@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using FluentMigrator.Runner;
 using HealthChecks.UI.Client;
 using Micro.Services.Tenants.Database;
 using Micro.Services.Tenants.DataContext;
@@ -98,7 +99,13 @@ namespace Micro.Services.Tenants
         public static IServiceCollection AddDatabase(this IServiceCollection services, string connection) =>
             services
                 .AddDbContext<GlobalDbContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()))
-                .AddDbContext<TenantDbContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()));
+                .AddDbContext<TenantDbContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()))
+                .AddScoped<IDatabaseMigrator, DatabaseMigrator>()
+                .AddFluentMigratorCore()
+                .ConfigureRunner(rb => rb
+                    .AddSqlServer()
+                    .WithGlobalConnectionString(connection)
+                    .ScanIn(typeof(Migration1_Schema).Assembly).For.All());
 
         public static void CreateDatabase(this IApplicationBuilder app)
         {
@@ -112,6 +119,9 @@ namespace Micro.Services.Tenants
                 var dbConnection = configuration.GetSqlConnectionString();
                 var dbName = configuration.GetSqlDatabaseName();
                 var dbServer = configuration.GetSqlServerName();
+
+                log.LogInformation($"Database Connection: {dbConnection}");
+
                 int retryAttempts = 30;
                 int retryInterval = 1000;
                 var sql = $"IF NOT EXISTS(SELECT name FROM master.dbo.sysdatabases WHERE name = N'{dbName}') CREATE DATABASE [{dbName}]";
@@ -134,8 +144,14 @@ namespace Micro.Services.Tenants
                             conn.Close();
                         }
                     });
+            }
+        }
 
-                var migrator = new DatabaseMigrator(dbConnection);
+        public static void MigrateDatabase(this IApplicationBuilder app)
+        {
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var migrator = scope.ServiceProvider.GetRequiredService<IDatabaseMigrator>();
                 migrator.ReCreate();
             }
         }

@@ -45,6 +45,7 @@ namespace Micro.Services.Tenants
             app.UseAuthentication();
             app.UseMvc();
             app.CreateDatabase();
+            app.MigrateDatabase();
         }
     }
 }

@@ -1,6 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using FluentMigrator.Runner;
+using Microsoft.Extensions.Logging;
 
 namespace Micro.Services.Tenants.Database
 {
@@ -13,11 +13,13 @@ namespace Micro.Services.Tenants.Database
 
     public class DatabaseMigrator : IDatabaseMigrator
     {
-        private readonly string _connection;
+        private readonly ILogger<DatabaseMigrator> _log;
+        private readonly IMigrationRunner _runner;
 
-        public DatabaseMigrator(string connection)
+        public DatabaseMigrator(ILogger<DatabaseMigrator> log , IMigrationRunner runner)
         {
-            _connection = connection;
+            _log = log;
+            _runner = runner;
         }
 
         public void ReCreate()
@@ -38,25 +40,8 @@ namespace Micro.Services.Tenants.Database
 
         public void Migrate(Action<IMigrationRunner> action)
         {
-            var serviceProvider = CreateServices();
-            using (var scope = serviceProvider.CreateScope())
-            {
-                var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
-                System.Diagnostics.Trace.WriteLine($"Migrating {action.GetType().Name}");
-                action(runner);
-            }
-        }
-
-        private IServiceProvider CreateServices()
-        {
-            return new ServiceCollection()
-                .AddFluentMigratorCore()
-                .ConfigureRunner(rb => rb
-                    .AddSqlServer()
-                    .WithGlobalConnectionString(_connection)
-                    .ScanIn(typeof(Migration1_Schema).Assembly).For.All())
-                .AddLogging(lb => lb.AddFluentMigratorConsole())
-                .BuildServiceProvider(false);
+            _log.LogInformation($"Migrating {action.GetType().Name}");
+            action(_runner);
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Micro.Services.Tenants.Domain.Users
 {
     [Route("api/users")]
+    [Produces("application/json")]
     [ApiController]
     public partial class Api : ControllerBase
     {

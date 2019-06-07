@@ -7,6 +7,7 @@ using Micro.Services.Tenants.Exceptions;
 using Micro.Services.Tenants.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static Micro.Services.Tenants.Domain.Roles.ListPermissions;
 
 namespace Micro.Services.Tenants.Domain.Roles
 {
@@ -18,10 +19,10 @@ namespace Micro.Services.Tenants.Domain.Roles
         /// <param name="id">id</param>
         /// <returns>a list of permissions</returns>
         [HttpGet("{id}/permissions")]
-        public async Task<ActionResult<ListRoles.Response>> GetRoles(int id) => Ok(await _mediator.Send(new ListRoles.Request(id)));
+        public async Task<ActionResult<Response>> ListPermissionsAsync(int id) => Ok(await _mediator.Send(new Request(id)));
     }
 
-    public static class ListRoles
+    public static class ListPermissions
     {
         public class Request : IdRequest<Response>
         {

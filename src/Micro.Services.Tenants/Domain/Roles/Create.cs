@@ -20,22 +20,17 @@ namespace Micro.Services.Tenants.Domain.Roles
         /// <param name="request">the request</param>
         /// <returns>a team</returns>
         [HttpPost]
-        public async Task<ActionResult<Response>> Post(Request request) => Ok(await _mediator.Send(request));
+        public async Task<ActionResult<RoleModel>> PostAsync(Request request) => Ok(await _mediator.Send(request));
     }
 
     public static class Create
     {
-        public class Request : IRequest<Response>
+        public class Request : IRequest<RoleModel>
         {
             public string Name { get; set; }
         }
 
-        public class Response
-        {
-            public RoleModel Role { get; set; }
-        }
-
-        public class Handler : IRequestHandler<Request, Response>
+        public class Handler : IRequestHandler<Request, RoleModel>
         {
             private readonly TenantDbContext _db;
             private readonly IMapper _mapper;
@@ -46,11 +41,11 @@ namespace Micro.Services.Tenants.Domain.Roles
                 _mapper = mapper;
             }
 
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken = default(CancellationToken))
+            public async Task<RoleModel> Handle(Request request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 var name = request.Name;
 
-                using (var transaction = await _db.Database.BeginTransactionAsync())
+                using (var transaction = await _db.Database.BeginTransactionAsync(cancellationToken))
                 {
                     if(_db.Roles.Any(x=>x.Name == name))
                     {
@@ -61,16 +56,13 @@ namespace Micro.Services.Tenants.Domain.Roles
                     {
                         Name = name
                     };
-                    await _db.Roles.AddAsync(data);
+                    await _db.Roles.AddAsync(data, cancellationToken);
 
-                    await _db.SaveChangesAsync();
+                    await _db.SaveChangesAsync(cancellationToken);
 
                     transaction.Commit();
 
-                    return new Response
-                    {
-                        Role = _mapper.Map<Role, RoleModel>(data)
-                    };
+                    return _mapper.Map<Role, RoleModel>(data);
                 }
             }
         }

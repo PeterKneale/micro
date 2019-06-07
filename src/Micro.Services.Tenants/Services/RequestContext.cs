@@ -25,6 +25,7 @@ namespace Micro.Services.Tenants.Services
             var claim = user.Claims.SingleOrDefault(x => x.Type == type);
             if (claim == null)
             {
+                return 1;
                 throw new Exception($"No {type} claim found");
             }
             var id = int.Parse(claim.Value);

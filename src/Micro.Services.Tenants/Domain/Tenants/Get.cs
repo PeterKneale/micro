@@ -22,7 +22,7 @@ namespace Micro.Services.Tenants.Domain.Tenants
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<TenantModel>> Get(int id) => Ok(await _mediator.Send(new Request(id)));
+        public async Task<ActionResult<TenantModel>> GetAsync(int id) => Ok(await _mediator.Send(new Request(id)));
     }
    
     public static class Get

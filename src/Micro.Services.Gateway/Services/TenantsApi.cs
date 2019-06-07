@@ -3,10 +3,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Micro.Services.Gateway.Models;
+using Micro.Services.Tenants.Models.Common;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Teams = Micro.Services.Tenants.Domain.Teams;
-using Users = Micro.Services.Tenants.Domain.Users;
 
 namespace Micro.Services.Gateway.GraphQL
 {
@@ -31,41 +30,79 @@ namespace Micro.Services.Gateway.GraphQL
             throw new System.NotImplementedException();
         }
 
-        public async Task<TeamModel> GetTeamAsync(string id)
-        {
-            var result = await Get<Teams.Get.Response>($"/api/teams/{id}");
-            return ConvertTeam(result.Team);
-        }
+
 
         public async Task<UserModel> GetUserAsync(string id)
         {
-            var result = await Get<Users.Get.Response>($"/api/users/{id}");
-            return ConvertUser(result.User);
+            var result = await Get<UserModel>($"/api/users/{id}");
+            return Convert(result);
+        }
+
+        public async Task<TeamModel> GetTeamAsync(string id)
+        {
+            var result = await Get<TeamModel>($"/api/teams/{id}");
+            return Convert(result);
+        }
+
+        public async Task<RoleModel> GetRoleAsync(string id)
+        {
+            var result = await Get<RoleModel>($"/api/roles/{id}");
+            return Convert(result);
+        }
+
+
+
+        public async Task<IEnumerable<UserModel>> ListUsersAsync()
+        {
+            var response = await Get<PagedResponse<UserModel>>($"/api/users");
+            return response.Items.Select(Convert);
         }
 
         public async Task<IEnumerable<TeamModel>> ListTeamsAsync()
         {
-            var response = await Get<Teams.List.Response>("/api/teams");
-            return response.Teams.Select(ConvertTeam);
+            var response = await Get<PagedResponse<TeamModel>>("/api/teams");
+            return response.Items.Select(Convert);
+        }
+
+        public async Task<IEnumerable<RoleModel>> ListRolesAsync()
+        {
+            var response = await Get<PagedResponse<RoleModel>>("/api/roles");
+            return response.Items.Select(Convert);
+        }
+
+
+
+
+        public async Task<IEnumerable<UserModel>> ListUsersByTeamAsync(string id)
+        {
+            var response = await Get<PagedResponse<UserModel>>($"/api/teams/{id}/users");
+            return response.Items.Select(Convert);
+        }
+
+        public async Task<IEnumerable<TeamModel>> ListTeamsByRoleAsync(string id)
+        {
+            var response = await Get<PagedResponse<TeamModel>>($"/api/roles/{id}/teams");
+            return response.Items.Select(Convert);
         }
 
         public async Task<IEnumerable<TeamModel>> ListTeamsByUserAsync(string id)
         {
-            var response = await Get<Users.ListTeams.Response>($"/api/users/{id}/teams");
-            return response.Teams.Select(x => ConvertTeam(x));
+            var response = await Get<PagedResponse<TeamModel>>($"/api/users/{id}/teams");
+            return response.Items.Select(Convert);
         }
 
-        public async Task<IEnumerable<UserModel>> ListUsersAsync()
+        public async Task<IEnumerable<RoleModel>> ListRolesByTeamAsync(string id)
         {
-            var response = await Get<Users.List.Response>($"/api/users");
-            return response.Users.Select(ConvertUser);
+            var response = await Get<PagedResponse<RoleModel>>($"/api/teams/{id}/roles");
+            return response.Items.Select(Convert);
         }
 
-        public async Task<IEnumerable<UserModel>> ListUsersByTeamAsync(string id)
+        public async Task<IEnumerable<string>> ListPermissionsByRoleAsync(string id)
         {
-            var response = await Get<Teams.ListUsers.Response>($"/api/teams/{id}/users");
-            return response.Users.Select(ConvertUser);
+            var response = await Get<string[]>($"/api/roles/{id}/permissions");
+            return response;
         }
+
 
         private async Task<T> Get<T>(string url)
         {
@@ -83,16 +120,22 @@ namespace Micro.Services.Gateway.GraphQL
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
         }
 
-        private static TeamModel ConvertTeam(Tenants.Models.TeamModel model) => new TeamModel
+        private static TeamModel Convert(TeamModel model) => new TeamModel
         {
             Id = model.Id.ToString(),
             Name = model.Name
         };
 
-        private static UserModel ConvertUser(Tenants.Models.UserModel model) => new UserModel
+        private static UserModel Convert(UserModel model) => new UserModel
         {
             Id = model.Id.ToString(),
             Name = model.FirstName + " " + model.LastName
+        };
+
+        private static RoleModel Convert(RoleModel model) => new RoleModel
+        {
+            Id = model.Id.ToString(),
+            Name = model.Name
         };
     }
 }

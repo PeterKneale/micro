@@ -32,7 +32,9 @@ namespace Micro.Services.Tenants.IntegrationTests
         }
 
         public static string ConnectionString => _config["ConnectionString"] ?? throw new Exception($"Connection string not configured");
+
         public static string RetryAttempts => _config["RetryAttempts"] ?? throw new Exception($"Retry attempts not configured");
+
         public static string RetryInterval => _config["RetryInterval"] ?? throw new Exception($"Retry interval not configured");
 
         public static AsyncRetryPolicy RetryAsync { get; }

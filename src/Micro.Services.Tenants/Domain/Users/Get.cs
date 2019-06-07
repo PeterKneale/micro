@@ -21,7 +21,7 @@ namespace Micro.Services.Tenants.Domain.Users
         /// <param name="id">id</param>
         /// <returns>a user</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Response>> Get(int id) => Ok(await _mediator.Send(new Request(id)));
+        public async Task<ActionResult<Response>> GetAsync(int id) => Ok(await _mediator.Send(new Request(id)));
     }
 
     public static class Get

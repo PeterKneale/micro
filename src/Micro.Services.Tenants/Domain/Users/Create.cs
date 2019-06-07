@@ -19,7 +19,7 @@ namespace Micro.Services.Tenants.Domain.Users
         /// <param name="request">the request</param>
         /// <returns>a user</returns>
         [HttpPost]
-        public async Task<ActionResult<Response>> Post(Request request)
+        public async Task<ActionResult<Response>> PostAsync(Request request)
         {
             return Ok(await _mediator.Send(request));
         }

@@ -10,6 +10,7 @@ using Micro.Services.Tenants.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static Micro.Services.Tenants.Constants;
+using static Micro.Services.Tenants.Domain.Tenants.Create;
 
 namespace Micro.Services.Tenants.Domain.Tenants
 {
@@ -21,9 +22,9 @@ namespace Micro.Services.Tenants.Domain.Tenants
         /// <param name="command">the command</param>
         /// <returns>a tenant</returns>
         [HttpPost]
-        [ProducesResponseType(typeof(Create.Response), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(Response), (int)HttpStatusCode.Created)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult> Post([FromBody] Create.Request command) => new JsonResult(await _mediator.Send(command));
+        public async Task<ActionResult> Post([FromBody] Request command) => new JsonResult(await _mediator.Send(command));
     }
 
     public static class Create

@@ -1,13 +1,13 @@
-using System.Threading;
-using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Micro.Services.Tenants.Data;
 using Micro.Services.Tenants.DataContext;
 using Micro.Services.Tenants.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
+using static Micro.Services.Tenants.Domain.Teams.List;
 
 namespace Micro.Services.Tenants.Domain.Teams
 {
@@ -18,7 +18,7 @@ namespace Micro.Services.Tenants.Domain.Teams
         /// </summary>
         /// <returns>a list of teams</returns>
         [HttpGet]
-        public async Task<ActionResult<List.Response>> List() => Ok(await _mediator.Send(new List.Request()));
+        public async Task<ActionResult<Response>> ListAsync() => Ok(await _mediator.Send(new Request()));
     }
 
     public static class List

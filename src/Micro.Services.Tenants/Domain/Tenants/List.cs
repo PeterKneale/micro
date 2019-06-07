@@ -20,7 +20,7 @@ namespace Micro.Services.Tenants.Domain.Tenants
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<Response>> Get() => Ok(await _mediator.Send(new Request()));
+        public async Task<ActionResult<Response>> ListAsync() => Ok(await _mediator.Send(new Request()));
     }
     
     public static class List

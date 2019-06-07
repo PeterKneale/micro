@@ -20,7 +20,7 @@ namespace Micro.Services.Tenants.Domain.Teams
         /// <param name="request">the request</param>
         /// <returns>a team</returns>
         [HttpPost]
-        public async Task<ActionResult<Response>> Post(Request request) => Ok(await _mediator.Send(request));
+        public async Task<ActionResult<Response>> PostAsync(Request request) => Ok(await _mediator.Send(request));
     }
 
     public static class Create

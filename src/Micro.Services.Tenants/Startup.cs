@@ -22,7 +22,7 @@ namespace Micro.Services.Tenants
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(_configuration);
+            services.AddAuth(_configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddDatabase(_configuration.GetSqlConnectionString());
             services.AddMediatR(typeof(Startup).Assembly);

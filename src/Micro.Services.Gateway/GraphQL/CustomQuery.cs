@@ -24,6 +24,14 @@ namespace Micro.Services.Gateway.GraphQL
                 resolve: context => data.GetTeamAsync(context.GetArgument<string>("id"))
             );
 
+            Field<RoleType>(
+                "Role",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id", Description = "id of the Role" }
+                ),
+                resolve: context => data.GetRoleAsync(context.GetArgument<string>("id"))
+            );
+
             Field< ListGraphType<TeamType>>(
                 "Teams",
                 resolve: context => data.ListTeamsAsync()
@@ -32,6 +40,11 @@ namespace Micro.Services.Gateway.GraphQL
             Field<ListGraphType<UserType>>(
                 "Users",
                 resolve: context => data.ListUsersAsync()
+            );
+
+            Field<ListGraphType<RoleType>>(
+                "Roles",
+                resolve: context => data.ListRolesAsync()
             );
         }
     }

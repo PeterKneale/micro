@@ -10,9 +10,14 @@ namespace Micro.Services.Gateway.GraphQL.Types
             Name = "Team";
 
             Field(h => h.Id).Description("The id of the Team.");
+
             Field(h => h.Name, nullable: true).Description("The name of the Team.");
+
             Field<ListGraphType<UserType>>("Users", "The users that belong to the team",
                 resolve: context => api.ListUsersByTeamAsync(context.Source.Id));
+
+            Field<ListGraphType<RoleType>>("Roles", "The roles that belong to the team",
+                resolve: context => api.ListRolesByTeamAsync(context.Source.Id));
         }
     }
 }

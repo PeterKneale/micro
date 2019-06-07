@@ -1,8 +1,8 @@
-using MediatR;
+﻿using MediatR;
 
 namespace Micro.Services.Tenants.Models.Common
 {
-    public abstract class IdCommand : IRequest
+    public class IdCommand : IRequest
     {
         protected IdCommand(int id)
         {

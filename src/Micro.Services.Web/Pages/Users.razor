@@ -10,50 +10,27 @@
 
 @if (!IsLoading)
 {
-    @foreach (var user in _model.Users)
-    {
-        <li>@user.Name [@Describe(user.Teams)]</li>
-    }
+    <div class="list-group">
+        @foreach (var user in _model.Users)
+        {
+            <a href="users/@user.Id" class="list-group-item list-group-item-action">@user.Name</a>
+        }
+    </div>
 }
 
 @functions
 {
+    private Model _model;
 
-    private PageModel _model;
     private bool IsLoading => _model == null;
 
     protected async override Task OnInitAsync()
     {
-        _model = await Api.ExecuteGraphQuery<PageModel>("{ users { name teams { id name} } }");
+        _model = await Api.ExecuteGraphQuery<Model>("{ users { id name } }");
     }
 
-    public class PageModel
+    public class Model
     {
         public IEnumerable<UserModel> Users { get; set; }
-    }
-
-    public class UserModel
-    {
-        public string Name { get; set; }
-        public IEnumerable<TeamModel> Teams { get; set; }
-    }
-
-    public class TeamModel
-    {
-        public string Id { get; set; }
-
-        public string Name { get; set; }
-    }
-
-    private string Describe(IEnumerable<TeamModel> teams)
-    {
-        if (teams == null || !teams.Any())
-        {
-            return "none";
-        }
-        else
-        {
-            return string.Join(",", teams.Select(x=>$"{x.Id}{x.Name}"));
-        }
     }
 }

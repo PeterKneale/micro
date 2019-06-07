@@ -1,13 +1,13 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
+using Micro.Services.Tenants.Data;
+using Micro.Services.Tenants.DataContext;
+using Micro.Services.Tenants.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Micro.Services.Tenants.DataContext;
-using Micro.Services.Tenants.Data;
 using System.Threading;
 using System.Threading.Tasks;
-using Micro.Services.Tenants.Models;
+using static Micro.Services.Tenants.Domain.Users.List;
 
 namespace Micro.Services.Tenants.Domain.Users
 {
@@ -16,10 +16,9 @@ namespace Micro.Services.Tenants.Domain.Users
         /// <summary>
         /// Lists users
         /// </summary>
-        /// <param name="page">page number</param>
         /// <returns>a list of users</returns>
         [HttpGet]
-        public async Task<IActionResult> List(int page = 1) => Ok(await _mediator.Send(new List.Request()));
+        public async Task<ActionResult<Response>> ListAsync() => Ok(await _mediator.Send(new Request()));
     }
 
     public static class List

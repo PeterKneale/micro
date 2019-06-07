@@ -17,24 +17,19 @@ namespace Micro.Services.Tenants.Domain.Roles
         /// <param name="id">id</param>
         /// <returns>a team</returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Response>> Delete(int id) => Ok(await _mediator.Send(new Request(id)));
+        public async Task<ActionResult<Response>> DeleteAsync(int id) => Ok(await _mediator.Send(new Request(id)));
     }
 
     public static class Delete
     {
-        public class Request : IdRequest<Response>
+        public class Request : IdRequest<EmptyResponse>
         {
             public Request(int id) : base(id)
             {
             }
         }
 
-        public class Response
-        {
-
-        }
-
-        public class Handler : IRequestHandler<Request, Response>
+        public class Handler : IRequestHandler<Request, EmptyResponse>
         {
             private readonly TenantDbContext _db;
 
@@ -43,7 +38,7 @@ namespace Micro.Services.Tenants.Domain.Roles
                 _db = db;
             }
 
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken = default(CancellationToken))
+            public async Task<EmptyResponse> Handle(Request request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 var role = await _db
                     .Roles
@@ -66,7 +61,7 @@ namespace Micro.Services.Tenants.Domain.Roles
                     await _db.SaveChangesAsync();
                 }
 
-                return new Response();
+                return new EmptyResponse();
             }
         }
     }

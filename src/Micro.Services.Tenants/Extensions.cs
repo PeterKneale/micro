@@ -1,17 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using FluentMigrator.Runner;
 using HealthChecks.UI.Client;
 using Micro.Services.Tenants.Database;
 using Micro.Services.Tenants.DataContext;
 using Micro.Services.Tenants.Exceptions;
 using Micro.Services.Tenants.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -20,10 +12,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Polly;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Micro.Services.Tenants
 {
@@ -37,25 +34,16 @@ namespace Micro.Services.Tenants
                 .AddScoped<ITenantContext, RequestContext>();
         }
 
-        public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
             services
-                .AddAuthentication(x =>
+                .AddAuthorization()
+                .AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
                 {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
-                    x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetAuthSecret())),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
+                    options.Authority = configuration.GetAuthority();
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "tenants";
                 });
             return services;
         }
@@ -246,7 +234,7 @@ namespace Micro.Services.Tenants
         public static string GetSeqUrl(this IConfiguration configuration) =>
             configuration["SeqUrl"];
 
-        public static string GetAuthSecret(this IConfiguration configuration) =>
-            configuration["AUTH_SECRET"];
+        public static string GetAuthority(this IConfiguration configuration) =>
+            configuration["Authority"];
     }
 }

@@ -15,6 +15,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.0" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.1" />
     <PackageReference Include="FluentMigrator.Runner.SqlServer" Version="3.2.1" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.1.0" />
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -38,11 +39,14 @@
 
   <ItemGroup>
     <Folder Include="Database\" />
-    <Folder Include="Queries\" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Database\Scripts\*.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Micro.Services.Tenants.Models\Micro.Services.Tenants.Models.csproj" />
   </ItemGroup>
 
 </Project>

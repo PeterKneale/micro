@@ -25,7 +25,7 @@ namespace Micro.Services.Tenants.Domain.Auth
         /// <param name="request">the request</param>
         /// <returns>a token</returns>
         [HttpPost]
-        public async Task<ActionResult<Response>> Post(Request request) => Ok(await _mediator.Send(request));
+        public async Task<ActionResult<Response>> PostAsync(Request request) => Ok(await _mediator.Send(request));
     }
 
     public static class Create
@@ -69,7 +69,7 @@ namespace Micro.Services.Tenants.Domain.Auth
 
                 // generate jwt token
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_configuration.GetAuthSecret());
+                var key = Encoding.ASCII.GetBytes(_configuration.GetAuthority());
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]

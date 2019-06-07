@@ -1,12 +1,11 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
+using Micro.Services.Tenants.DataContext;
+using Micro.Services.Tenants.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Micro.Services.Tenants.DataContext;
 using System.Threading;
 using System.Threading.Tasks;
-using Micro.Services.Tenants.Models.Common;
 using static Micro.Services.Tenants.Domain.Teams.Delete;
 
 namespace Micro.Services.Tenants.Domain.Teams
@@ -19,7 +18,7 @@ namespace Micro.Services.Tenants.Domain.Teams
         /// <param name="id">id</param>
         /// <returns>a team</returns>
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Response>> Delete(int id) => Ok(await _mediator.Send(new Request(id)));
+        public async Task<ActionResult<Response>> DeleteAsync(int id) => Ok(await _mediator.Send(new Request(id)));
     }
 
     public static class Delete

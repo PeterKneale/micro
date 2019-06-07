@@ -35,7 +35,8 @@ namespace Micro.Services.Gateway
                 .AddSingleton<UserInputType>()
                 .AddSingleton<TeamType>()
                 .AddSingleton<TeamInputType>()
-                .AddSingleton<TeamInputType>()
+                .AddSingleton<RoleType>()
+                .AddSingleton<RoleInputType>()
                 .AddSingleton<ISchema, CustomSchema>();
             services
                 .AddGraphQL(_ =>

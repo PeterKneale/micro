@@ -10,7 +10,7 @@ using Micro.Services.Tenants.Models.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static Micro.Services.Tenants.Domain.Users.Get;
+using static Micro.Services.Tenants.Domain.Users.GetTenant;
 
 namespace Micro.Services.Tenants.Domain.Users
 {
@@ -21,12 +21,12 @@ namespace Micro.Services.Tenants.Domain.Users
         /// </summary>
         /// <param name="id">id</param>
         /// <returns>a user</returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id}/tenant")]
         [AllowAnonymous]
-        public async Task<ActionResult<Response>> GetAsync(int id) => Ok(await _mediator.Send(new Request(id)));
+        public async Task<ActionResult<Response>> GetTenantAsync(int id) => Ok(await _mediator.Send(new Request(id)));
     }
 
-    public static class Get
+    public static class GetTenant
     {
         public class Request : IdRequest<Response>
         {
@@ -37,7 +37,7 @@ namespace Micro.Services.Tenants.Domain.Users
 
         public class Response
         {
-            public UserModel User { get; set; }
+            public TenantModel Tenant { get; set; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -57,6 +57,7 @@ namespace Micro.Services.Tenants.Domain.Users
 
                 var user = await _db
                     .Users
+                    .Include(x=>x.Tenant)
                     .AsNoTracking()
                     .SingleOrDefaultAsync(x => x.Id == id);
 
@@ -67,7 +68,7 @@ namespace Micro.Services.Tenants.Domain.Users
 
                 return new Response
                 {
-                    User = _mapper.Map<User, UserModel>(user)
+                    Tenant = _mapper.Map<Tenant, TenantModel>(user.Tenant)
                 };
             }
         }

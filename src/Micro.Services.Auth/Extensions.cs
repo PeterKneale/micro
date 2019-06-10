@@ -1,9 +1,10 @@
 using FluentMigrator.Runner;
 using HealthChecks.UI.Client;
-using Micro.Services.Tenants.Database;
-using Micro.Services.Tenants.DataContext;
-using Micro.Services.Tenants.Exceptions;
-using Micro.Services.Tenants.Services;
+using IdentityServer4.Services;
+using IdentityServer4.Validation;
+using Micro.Services.Auth.Database;
+using Micro.Services.Auth.DataContext;
+using Micro.Services.Auth.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -14,15 +15,13 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
-namespace Micro.Services.Tenants
+namespace Micro.Services.Auth
 {
     public static class Extensions
     {
@@ -30,78 +29,29 @@ namespace Micro.Services.Tenants
         {
             return services
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
-                .AddScoped<IUserContext, RequestContext>()
-                .AddScoped<ITenantContext, RequestContext>();
+                .AddTransient<IUserApi, UserApi>()
+                .AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>()
+                .AddTransient<IProfileService, ProfileService>();
         }
-
-        public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
+        
+        public static IServiceCollection AddDatabase(this IServiceCollection services, string connection)
         {
-            services
-                .AddAuthorization()
-                .AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = "http://localhost:5004";
-                    options.RequireHttpsMetadata = false;
-                    options.ApiName = "api";
-                    options.ApiSecret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-                });
-            return services;
-        }
-
-        public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
-        {
-            return services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = Program.AppName, Version = "v1" });
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-                c.CustomSchemaIds(i => i.FullName);
-                c.DescribeAllEnumsAsStrings();
-            });
-        }
-
-        public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app)
-        {
-            app.UseSwagger(c =>
-            {
-                // For postman integration
-                c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-                {
-                    // if postman is in the query, generate a postman compatible swagger file
-                    if (httpReq.Query.ContainsKey("postman"))
-                    {
-                        swaggerDoc.Host = "{{host}}";
-                        swaggerDoc.Schemes = new string[] { "http" };
-                    }
-                });
-            });
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{Program.AppName} {Program.AppVersion}");
-                c.RoutePrefix = "";
-            });
-            return app;
-        }
-
-        public static IServiceCollection AddDatabase(this IServiceCollection services, string connection) =>
-            services
-                .AddDbContext<GlobalDbContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()))
-                .AddDbContext<TenantDbContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()))
+            return services
+                .AddDbContext<DatabaseContext>(ctx => ctx.UseSqlServer(connection, opt => opt.EnableRetryOnFailure()))
                 .AddScoped<IDatabaseMigrator, DatabaseMigrator>()
                 .AddFluentMigratorCore()
                 .ConfigureRunner(rb => rb
-                    .AddSqlServer()
-                    .WithGlobalConnectionString(connection)
-                    .ScanIn(typeof(Migration1_Schema).Assembly).For.All());
+                .AddSqlServer()
+                .WithGlobalConnectionString(connection)
+                .ScanIn(typeof(Migration1_Schema).Assembly).For.All());
+        }
 
         public static void CreateDatabase(this IApplicationBuilder app)
         {
             using (var scope = app.ApplicationServices.CreateScope())
             {
                 var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-                var db = scope.ServiceProvider.GetRequiredService<GlobalDbContext>();
+                var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 var log = scope.ServiceProvider.GetRequiredService<ILogger<Startup>>();
 
                 var masterConnection = configuration.GetMasterSqlConnectionString();
@@ -111,8 +61,8 @@ namespace Micro.Services.Tenants
 
                 log.LogInformation($"Database Connection: {dbConnection}");
 
-                int retryAttempts = 30;
-                int retryInterval = 1000;
+                var retryAttempts = 30;
+                var retryInterval = 1000;
                 var sql = $"IF NOT EXISTS(SELECT name FROM master.dbo.sysdatabases WHERE name = N'{dbName}') CREATE DATABASE [{dbName}]";
                 Policy
                     .Handle<Exception>()
@@ -155,7 +105,8 @@ namespace Micro.Services.Tenants
         }
 
         public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app)
-            => app
+        {
+            return app
                 .UseHealthChecksUI()
                 .UseHealthChecks("/health/alive", new HealthCheckOptions
                 {
@@ -167,9 +118,11 @@ namespace Micro.Services.Tenants
                     Predicate = r => r.Name == "db",
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
+        }
 
         public static IApplicationBuilder UseCustomMetaEndpoints(this IApplicationBuilder app)
-            => app
+        {
+            return app
                 .Map("/app/name", appBuilder =>
                 {
                     appBuilder.Run(async context =>
@@ -204,35 +157,37 @@ namespace Micro.Services.Tenants
                     {
                         throw new Exception("ERROR!");
                     });
-                })
-                .Map("/errors/notfound", appBuilder =>
-                {
-                    appBuilder.Run(context =>
-                    {
-                        throw new NotFoundException("entity", "property", "value");
-                    });
-                })
-                .Map("/errors/notunique", appBuilder =>
-                {
-                    appBuilder.Run(context =>
-                    {
-                        throw new NotUniqueException("entity", "property", "value");
-                    });
                 });
+        }
 
-        public static string GetSqlConnectionString(this IConfiguration configuration) =>
-            configuration["ConnectionString"];
+        public static string GetSqlConnectionString(this IConfiguration configuration)
+        {
+            return configuration["ConnectionString"];
+        }
 
-        public static string GetMasterSqlConnectionString(this IConfiguration configuration) =>
-            new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()) { InitialCatalog = "master" }.ToString();
+        public static string GetMasterSqlConnectionString(this IConfiguration configuration)
+        {
+            return new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()) { InitialCatalog = "master" }.ToString();
+        }
 
-        public static string GetSqlDatabaseName(this IConfiguration configuration) =>
-            new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()).InitialCatalog;
+        public static string GetSqlDatabaseName(this IConfiguration configuration)
+        {
+            return new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()).InitialCatalog;
+        }
 
-        public static string GetSqlServerName(this IConfiguration configuration) =>
-            new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()).DataSource;
+        public static string GetSqlServerName(this IConfiguration configuration)
+        {
+            return new SqlConnectionStringBuilder(configuration.GetSqlConnectionString()).DataSource;
+        }
 
-        public static string GetSeqUrl(this IConfiguration configuration) =>
-            configuration["SeqUrl"];
+        public static string GetSeqUrl(this IConfiguration configuration)
+        {
+            return configuration["SeqUrl"];
+        }
+
+        public static string GetTenantsUrl(this IConfiguration configuration)
+        {
+            return configuration["TENANTS_URL"];
+        }
     }
 }

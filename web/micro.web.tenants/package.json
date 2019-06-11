@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "graphql": "^14.3.1",
     "prop-types": "^15.7.2",
     "ra-data-json-server": "^2.9.2",
     "react": "^16.8.6",

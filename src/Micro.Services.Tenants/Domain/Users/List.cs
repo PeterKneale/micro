@@ -1,8 +1,8 @@
 using AutoMapper;
 using MediatR;
-using Micro.Services.Tenants.Data;
 using Micro.Services.Tenants.DataContext;
 using Micro.Services.Tenants.Models;
+using Micro.Services.Tenants.Models.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
@@ -18,18 +18,23 @@ namespace Micro.Services.Tenants.Domain.Users
         /// </summary>
         /// <returns>a list of users</returns>
         [HttpGet]
-        public async Task<ActionResult<Response>> ListAsync() => Ok(await _mediator.Send(new Request()));
+        public async Task<ActionResult<Response>> ListAsync([FromQuery]Request request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
     }
 
     public static class List
     {
-        public class Request : IRequest<Response>
+        public class Request : PagedRequest<Response>
         {
         }
 
-        public class Response
+        public class Response : PagedResponse<UserModel>
         {
-            public UserModel[] Users { get; set; }
+            public Response(UserModel[] items, int pageNumber, int pageSize, int total) : base(items, pageNumber, pageSize, total)
+            {
+            }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -47,12 +52,14 @@ namespace Micro.Services.Tenants.Domain.Users
             {
                 var data = await _db.Users
                     .AsNoTracking()
+                    .TakePage(request)
                     .ToArrayAsync();
 
-                return new Response
-                {
-                    Users = _mapper.Map<User[], UserModel[]>(data)
-                };
+                var total = await _db.Users.CountAsync();
+
+                var models = _mapper.Map<UserModel[]>(data);
+
+                return new Response(models, request.PageNumber, request.PageSize, total);
             }
         }
     }

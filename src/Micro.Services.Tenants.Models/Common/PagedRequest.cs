@@ -2,7 +2,7 @@ using MediatR;
 
 namespace Micro.Services.Tenants.Models.Common
 {
-    public class PagedRequest<T> : IRequest<PagedResponse<T>>
+    public class PagedRequest<T> : IRequest<T>
     {
         /// <summary>
         /// Parameterless constructor required for binding to querystring

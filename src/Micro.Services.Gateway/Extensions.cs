@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http.Headers;
 using GraphQL;
 using GraphQL.Http;
 using GraphQL.Server;
@@ -17,6 +12,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http.Headers;
 
 namespace Micro.Services.Gateway
 {
@@ -74,67 +74,77 @@ namespace Micro.Services.Gateway
         }
 
         public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app)
-            => app
-                .UseHealthChecksUI()
-                .UseHealthChecks("/health/alive", new HealthCheckOptions
-                {
-                    Predicate = r => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                })
-                .UseHealthChecks("/health/ready", new HealthCheckOptions
-                {
-                    Predicate = r => true,
-                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-                });
+        {
+            return app
+                           .UseHealthChecksUI()
+                           .UseHealthChecks("/health/alive", new HealthCheckOptions
+                           {
+                               Predicate = r => true,
+                               ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                           })
+                           .UseHealthChecks("/health/ready", new HealthCheckOptions
+                           {
+                               Predicate = r => true,
+                               ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                           });
+        }
 
         public static IApplicationBuilder UseCustomMetaEndpoints(this IApplicationBuilder app)
-            => app
-                .Map("/app/name", appBuilder =>
-                {
-                    appBuilder.Run(async context =>
-                    {
-                        await context.Response.WriteAsync(Program.AppName);
-                    });
-                })
-                .Map("/app/version", appBuilder =>
-                {
-                    appBuilder.Run(async context =>
-                    {
-                        await context.Response.WriteAsync(Program.AppVersion);
-                    });
-                })
-                .Map("/app/config", appBuilder =>
-                {
-                    appBuilder.Run(async context =>
-                    {
-                        var d = new Dictionary<string, string>();
-                        var configuration = appBuilder.ApplicationServices.GetRequiredService<IConfiguration>();
-                        foreach (var entry in configuration.AsEnumerable().OrderBy(x => x.Key))
-                        {
-                            d.Add(entry.Key, entry.Value);
-                        }
-                        var json = JsonConvert.SerializeObject(d);
-                        await context.Response.WriteAsync(json);
-                    });
-                })
-                .Map("/errors/internal", appBuilder =>
-                {
-                    appBuilder.Run(context =>
-                    {
-                        throw new Exception("ERROR!");
-                    });
-                });
+        {
+            return app
+                           .Map("/app/name", appBuilder =>
+                           {
+                               appBuilder.Run(async context =>
+                               {
+                                   await context.Response.WriteAsync(Program.AppName);
+                               });
+                           })
+                           .Map("/app/version", appBuilder =>
+                           {
+                               appBuilder.Run(async context =>
+                               {
+                                   await context.Response.WriteAsync(Program.AppVersion);
+                               });
+                           })
+                           .Map("/app/config", appBuilder =>
+                           {
+                               appBuilder.Run(async context =>
+                               {
+                                   var d = new Dictionary<string, string>();
+                                   var configuration = appBuilder.ApplicationServices.GetRequiredService<IConfiguration>();
+                                   foreach (var entry in configuration.AsEnumerable().OrderBy(x => x.Key))
+                                   {
+                                       d.Add(entry.Key, entry.Value);
+                                   }
+                                   var json = JsonConvert.SerializeObject(d);
+                                   await context.Response.WriteAsync(json);
+                               });
+                           })
+                           .Map("/errors/internal", appBuilder =>
+                           {
+                               appBuilder.Run(context =>
+                               {
+                                   throw new Exception("ERROR!");
+                               });
+                           });
+        }
 
-        public static string GetSeqUrl(this IConfiguration configuration) =>
-            configuration["SeqUrl"];
+        public static string GetSeqUrl(this IConfiguration configuration)
+        {
+            return configuration["SeqUrl"];
+        }
 
-        public static string GetTenantsUrl(this IConfiguration configuration) =>
-            configuration["TENANTS_URL"];
+        public static string GetTenantsUrl(this IConfiguration configuration)
+        {
+            return configuration["TENANTS_URL"];
+        }
 
-        public static string GetContentUrl(this IConfiguration configuration) =>
-            configuration["CONTENT_URL"];
+        public static string GetContentUrl(this IConfiguration configuration)
+        {
+            return configuration["CONTENT_URL"];
+        }
 
-        public static readonly string Tenant1Jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjEiLCJ1c2VyX2lkIjoiMSIsInRlbmFudF9pZCI6IjEiLCJwZXJtaXNzaW9uIjpbInVzZXIuY3JlYXRlIiwidXNlci5kZWxldGUiLCJ1c2VyLmVkaXQiLCJ1c2VyLnZpZXciLCJ0ZWFtLmNyZWF0ZSIsInRlYW0uZGVsZXRlIiwidGVhbS5lZGl0IiwidGVhbS52aWV3Il0sIm5iZiI6MTU1OTMwNTUzMSwiZXhwIjoxNTU5OTEwMzMxLCJpYXQiOjE1NTkzMDU1MzF9.YWIbYag1P1rZScc4w49fp7EmeyoSjqZvZF1y_LQbU5k";
-        public static readonly string Tenant2Jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjMiLCJ1c2VyX2lkIjoiMyIsInRlbmFudF9pZCI6IjIiLCJwZXJtaXNzaW9uIjpbInVzZXIuY3JlYXRlIiwidXNlci5kZWxldGUiLCJ1c2VyLmVkaXQiLCJ1c2VyLnZpZXciLCJ0ZWFtLmNyZWF0ZSIsInRlYW0uZGVsZXRlIiwidGVhbS5lZGl0IiwidGVhbS52aWV3Il0sIm5iZiI6MTU1OTM1MzU2OCwiZXhwIjoxNTU5OTU4MzY4LCJpYXQiOjE1NTkzNTM1Njh9.xWc7TzHS6K1D4oeb5viO9uRn9HM3acztLbJmrqtQCJg";
+        public static readonly string Tenant1Jwt = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImFkNjNkMGFkNTkwNDNiZWMwMTA2MzBmZWI5OTdmNjc1IiwidHlwIjoiSldUIn0.eyJuYmYiOjE1NjAyNTUyMTEsImV4cCI6MTU2MDI1ODgxMSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDA0IiwiYXVkIjpbImh0dHA6Ly9sb2NhbGhvc3Q6NTAwNC9yZXNvdXJjZXMiLCJhcGkiXSwiY2xpZW50X2lkIjoicG9zdG1hbiIsInN1YiI6IjMiLCJhdXRoX3RpbWUiOjE1NjAyNTUyMTEsImlkcCI6ImxvY2FsIiwidXNlcl9pZCI6IjMiLCJ0ZW5hbnRfaWQiOiIyIiwicGVybWlzc2lvbiI6WyJ0ZWFtLmNyZWF0ZSIsInRlYW0uZGVsZXRlIiwidGVhbS5lZGl0IiwidGVhbS52aWV3IiwidXNlci5jcmVhdGUiLCJ1c2VyLmRlbGV0ZSIsInVzZXIuZWRpdCIsInVzZXIudmlldyJdLCJzY29wZSI6WyJhcGkiXSwiYW1yIjpbInB3ZCJdfQ.TM_JkdIIxTlGAcTZnffrJBKKMU9PLQewYPpLAS0IcDR2SE8zCy4cCU_7oIy93mfxFtkwkcLMLdJxWBHdrUq8mOMGWzaGnrgZGfbZKIIqArof-TCnPhQD73jewGbhcLdz1Ny3qD8hasp8MPcm11p8I6tk04OXI9C894iuaP8wItNoKk_3_TSU3UGPUzW_POI-fGjPyM1QDDIF5W_Vi9A44kAiWL4BnOAQke0sji4mgf-fXfOxhlzh5hxhjwFMpdfaW3WBf5eR5CRrhH198NqCdot1gia89YesFa0i_g7mpRVJp2g3n_CaT7dJhZ9MUabf1PGibvNR3unOlMcch98qYw";
+        public static readonly string Tenant2Jwt = "";
     }
 }

@@ -1,26 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Admin, Resource } from 'react-admin';
+import DataProvider from './DataProvider';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import Dashboard from './Dashboard';
+
+import { UserList } from './pages/UserList';
+import { UserCreate } from './pages/UserCreate';
+import { UserEdit } from './pages/UserEdit';
+import { TeamList } from './pages/TeamList';
+
+import UserIcon from '@material-ui/icons/Person';
+import TeamIcon from '@material-ui/icons/Group';
+
+
+const App = () => (
+    <Admin dashboard={Dashboard} dataProvider={DataProvider}>
+        <Resource name="users" list={UserList} edit={UserEdit} create={UserCreate} icon={UserIcon} />
+        <Resource name="teams" list={TeamList} icon={TeamIcon} />
+    </Admin>
+);
 
 export default App;

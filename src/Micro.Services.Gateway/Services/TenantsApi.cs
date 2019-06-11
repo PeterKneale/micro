@@ -117,7 +117,7 @@ namespace Micro.Services.Gateway.GraphQL
             }
 
             _log.LogInformation("Api {url} returned {status} {content}", url, status, content);
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<T>(content);
         }
 
         private static TeamModel Convert(TeamModel model) => new TeamModel

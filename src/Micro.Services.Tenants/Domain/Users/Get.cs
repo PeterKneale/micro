@@ -1,5 +1,3 @@
-using System.Threading;
-using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Micro.Services.Tenants.Data;
@@ -7,9 +5,10 @@ using Micro.Services.Tenants.DataContext;
 using Micro.Services.Tenants.Exceptions;
 using Micro.Services.Tenants.Models;
 using Micro.Services.Tenants.Models.Common;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 using static Micro.Services.Tenants.Domain.Users.Get;
 
 namespace Micro.Services.Tenants.Domain.Users
@@ -22,7 +21,6 @@ namespace Micro.Services.Tenants.Domain.Users
         /// <param name="id">id</param>
         /// <returns>a user</returns>
         [HttpGet("{id}")]
-        [AllowAnonymous]
         public async Task<ActionResult<Response>> GetAsync(int id) => Ok(await _mediator.Send(new Request(id)));
     }
 

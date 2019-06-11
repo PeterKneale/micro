@@ -1,7 +1,6 @@
 using MediatR;
 using Micro.Services.Tenants.DataContext;
 using Micro.Services.Tenants.Exceptions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -14,8 +13,10 @@ namespace Micro.Services.Tenants.Domain.Users
     public partial class Api : ControllerBase
     {
         [HttpGet("{id}/permissions")]
-        [AllowAnonymous]
-        public async Task<ActionResult<string[]>> ListPermissionsAsync([FromRoute]Request request) => Ok(await _mediator.Send(request));
+        public async Task<ActionResult<string[]>> ListPermissionsAsync([FromRoute]Request request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
     }
 
     public static class ListPermissions
@@ -27,9 +28,9 @@ namespace Micro.Services.Tenants.Domain.Users
 
         public class Handler : IRequestHandler<Request, string[]>
         {
-            private readonly GlobalDbContext _db;
+            private readonly TenantDbContext _db;
 
-            public Handler(GlobalDbContext db)
+            public Handler(TenantDbContext db)
             {
                 _db = db;
             }

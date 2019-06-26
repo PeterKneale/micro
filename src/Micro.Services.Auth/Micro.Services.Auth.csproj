@@ -24,7 +24,7 @@
   
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="2.2.0" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="2.2.28" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="2.2.31" />
     <PackageReference Include="FluentMigrator.Runner" Version="3.2.1" />
     <PackageReference Include="FluentMigrator.Runner.SqlServer" Version="3.2.1" />
     <PackageReference Include="IdentityServer4" Version="2.3.0" />

@@ -24,7 +24,7 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}-$(APPVEYOR_REPO_COMMIT)-$(APPVEYOR_BUILD_ID)'
 
-# install docker compsose
+# install docker compose
 install: 
   - sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 
   - sudo chmod +x /usr/local/bin/docker-compose
@@ -67,10 +67,3 @@ deploy_script:
 
 artifacts:
   - path: '/tests/*.xml'
-
-
-
-
-
-
-
